@@ -80,8 +80,7 @@ class OperatingBudgetParser(object):
             self.line2dict(line)
 
         if last_classification != classification:
-            #print classification
-            pass
+            print classification
 
 
 class PositionScheduleParser(object):

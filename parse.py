@@ -38,7 +38,7 @@ class OperatingBudgetParser(object):
         classification = self.classification
         flush_to_margin = line[0] != ' '
 
-        if fields[0] in (u'SUBTOTAL', u'TOTAL', u'INC/DEC', u'MODIFIED'):
+        if fields[0] in (u'SUBTOTAL', u'TOTAL', u'INC/DEC'):
             pass
 
         elif fields[0:2] == [u'OBJECT', u'CLASS']:

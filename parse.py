@@ -4,6 +4,7 @@
 import traceback
 import sys
 import re
+from pprint import pprint
 
 
 class OperatingBudgetParser(object):
@@ -15,9 +16,6 @@ class OperatingBudgetParser(object):
         self.supercolumns = u''
         self.supercolumn_dashes = u''
 
-    def supercolumn_name(self, i):
-        pass
-
     def line2dict(self, line):
         """
         Convert line to dict via current columns.
@@ -26,32 +24,53 @@ class OperatingBudgetParser(object):
         data = {}
         for match in re.finditer(r'\s+|$', self.column_dashes):
             end = match.end()
+            value = line[start:end].strip()
 
-            # TODO will overwrite duplicate column names, need to look at
-            # other headers
             colname = self.columns[start:end].strip()
-            data[colname] = line[start:end].strip()
+
+            if colname in (u'# CNTRCT', u'# POS', u'AMOUNT'):
+
+                # These columns are sometimes offset
+                if len(line) > end and line[end] != ' ':
+                    # import pdb
+                    # pdb.set_trace()
+                    pass
+
+                period = self.supercolumns[0]
+                if (period, colname) in data.keys():
+                    period = self.supercolumns[1]
+                    if (period, colname) in data.keys():
+                        data[(period, 'INC/DEC', colname)] = value
+                    else:
+                        data[(period, colname)] = value
+                else:
+                    data[(period, colname)] = value
+
+            else:
+                data[colname] = value
             start = end
 
-    def parse(self, line, fields):
-        last_classification = self.classification.copy()
+        return data
+
+    def parse(self, line, fields, extra=None):
         classification = self.classification
         flush_to_margin = line[0] != ' '
+        extra = extra if extra else {}
 
-        if fields[0] in (u'SUBTOTAL', u'TOTAL', u'INC/DEC'):
+        if fields[0] in (u'SUBTOTAL', u'TOTAL', u'INC/DEC', u'EXECUTIVE'):
             pass
 
         elif fields[0:2] == [u'OBJECT', u'CLASS']:
             self.columns = line
 
         elif fields[0] == u'MODIFIED' and not flush_to_margin:
-            self.supercolumns = line
+            self.supercolumns = re.split(r'\s{2,}', line.strip())
 
         elif set(line.strip()) == set(['-', ' ']):
             if flush_to_margin:
-                self.supercolumn_dashes = line.strip()
+                self.column_dashes = line
             else:
-                self.column_dashes = line.strip()
+                self.supercolumn_dashes = line
 
         elif fields[0] == u'AGENCY:':
             classification[u'agency'] = (fields[1], u' '.join(fields[3:]))
@@ -68,24 +87,21 @@ class OperatingBudgetParser(object):
         elif fields[0:2] == [u'BUDGET', u'CODE:'] and flush_to_margin:
             classification[u'budget_code'] = (fields[2], u' '.join(fields[3:]))
 
-        #elif fields[0].isdigit() and flush_to_margin:
-        #    classification[u'object_class'] = (
-        #        fields[0],
-        #        re.match(r'^\d{2} (.+)\s{2,}', line).group(1).strip())
-
-        #elif fields[0].isdigit() and not flush_to_margin:
-        #    pass
+        elif len(fields) == 1:
+            pass
 
         else:
-            self.line2dict(line)
-
-        if last_classification != classification:
-            print classification
+            data = self.line2dict(line)
+            data.update(extra)
+            pprint({
+                'classification': classification,
+                'data': data
+            })
 
 
 class PositionScheduleParser(object):
 
-    def parse(self, line, fields):
+    def parse(self, line, fields, extra=None):
         # TODO
         pass
 
@@ -116,7 +132,10 @@ def scrape(f):
 
         elif parser:
             try:
-                parser.parse(line, fields)
+                parser.parse(line, fields, extra={
+                    'source_line': i+1,
+                    'file_name': f.name
+                })
             except Exception as e:
                 traceback.print_exc()
                 print e

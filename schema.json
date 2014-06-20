@@ -1,0 +1,45 @@
+Agency
+	Unit of Appropriation
+		Responsibility Center
+			Budget Code
+				Item
+
+Mayoralty Page 8 - 107
+Each page is 142 Columns wide
+
+002-004 ends on page 136
+
+
+"agencies": [
+	{
+		"name":"mayoralty",
+		"id":"002",
+		"uoas":[
+			{
+				"name":"",
+				"id":"",
+				"responsibilityCenters":[
+					{
+						"name":"",
+						"id":"",
+						"budgetCodes":[
+							{
+								"name":"",
+								"id":"",
+								"objectClasses": [
+									{
+										"name":"",
+										"id":""	
+									}
+									
+
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+
+]

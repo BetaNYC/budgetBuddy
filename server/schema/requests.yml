@@ -1,0 +1,61 @@
+resourcePath: '/requests'
+apis:
+  -
+    path: '/requests.json'
+    operations:
+      -
+        httpMethod: 'GET'
+        nickname: 'getServiceRequests'
+        responseClass: "void"
+        summary: "Query the current status of multiple requests."
+        notes: "See http://wiki.open311.org/GeoReport_v2#GET_Service_Requests"
+        parameters:
+          -
+            paramType: "query"
+            name: "service_request_id"
+            required: false
+            dataType: "string"
+            description: "The unique ID of the service request created."
+            allowMultiple: true
+          -
+            paramType: "query"
+            name: "service_code"
+            dataType: "string"
+            description: "The unique identifier for the service request type. Default is 'all'"
+          -
+            paramType: "query"
+            name: "start_date"
+            dataType: "string"
+            description: "Must not be more than 90 days from end_date"
+          -
+            paramType: "query"
+            name: "end_date"
+            dataType: "string"
+            description: "Must not be more than 90 days from start_date"
+          -
+            paramType: "query"
+            name: "status"
+            dataType: "string"
+            description: "comma-delimited ['open','closed']"
+  # -
+  #   path: "/requests/{service_request_id}.{format}"
+  #   operations:
+  #   -
+  #     httpMethod: 'GET'
+  #     nickname: 'getServiceRequest'
+  #     responseClass: "void"
+  #     summary: "Query the current status of an individual request."
+  #     notes: "See http://wiki.open311.org/GeoReport_v2#GET_Service_Request"
+  #     parameters:
+  #       -
+  #         paramType: "path"
+  #         name: "service_request_id"
+  #         required: true
+  #         dataType: "string"
+  #         description: "The unique ID of the service request created."
+  #         allowMultiple: false
+  #       -
+  #         paramType: "query"
+  #         name: "jurisdiction_id"
+  #         dataType: "string"
+  #         description: "This is only required if the endpoint serves multiple jurisdictions."

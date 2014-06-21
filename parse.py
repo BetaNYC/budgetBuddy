@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-#import csv
+from decimal import Decimal
+import csv
 import traceback
 import sys
 import re
-from pprint import pprint
 
 
 class OperatingBudgetParser(object):
@@ -15,6 +15,52 @@ class OperatingBudgetParser(object):
         self.column_dashes = u''
         self.supercolumns = u''
         self.supercolumn_dashes = u''
+        self.csv_writer = csv.DictWriter(sys.stdout, [
+            'agency_id', 'agency_name',
+            'responsibility_center_id', 'responsibility_center_name',
+            'budget_code_id', 'budget_code_name',
+            'object_class', 'ic_ref',
+            'obj', 'description',
+            'budget_period', 'inc/dec', 'key', 'value',
+            'file_name', 'source_line'
+        ])
+        self.csv_writer.writeheader()
+
+    def process_value(self, v):
+        """
+        Convert values with commas and terminating minus signs to proper format
+        """
+        try:
+            if not v:
+                return ''
+            if v[-1] == '-':
+                v = '-' + v[0:-1]
+            return Decimal(v.replace(',', ''))
+        except Exception as e:
+            import pdb
+            pdb.set_trace()
+            pass
+
+    def output(self, classification, data):
+        for k, v in data.items():
+            self.csv_writer.writerow({
+                'agency_id': classification['agency'][0],
+                'agency_name': classification['agency'][1],
+                'responsibility_center_id': classification['responsibility_center'][0],
+                'responsibility_center_name': classification['responsibility_center'][1],
+                'budget_code_id': classification['budget_code'][0],
+                'budget_code_name': classification['budget_code'][1],
+                'object_class': classification['object_class'],
+                'ic_ref': classification['ic_ref'],
+                'obj': classification['obj'],
+                'description': classification['description'],
+                'file_name': classification['file_name'],
+                'source_line': classification['source_line'],
+                'budget_period': k[0],
+                'key': k[1],
+                'inc/dec': k[2] if len(k) > 2 else '',
+                'value': v
+            })
 
     def line2dict(self, line):
         """
@@ -23,15 +69,35 @@ class OperatingBudgetParser(object):
         start = 0
         data = {}
         last_colname = ''
-        for match in re.finditer(r'\s+|$', self.column_dashes):
+        for i, match in enumerate(re.finditer(r'\s+|$', self.column_dashes)):
             end = match.end()
 
             colname = self.columns[start:end].strip()
             value = line[start:end].strip()
             if not colname:
-                continue
+                pass
 
-            if colname in (u'# CNTRCT', u'# POS', u'AMOUNT'):
+            elif colname == 'OBJECT CLASS' and value:
+                if self.classification.get('object_class') != value:
+                    self.classification['object_class'] = value
+                    # Reset ic_ref when object_class changes
+                    self.classification['ic_ref'] = ''
+
+            elif colname == 'IC REF' and value:
+                self.classification['ic_ref'] = value
+
+            elif colname == 'DESCRIPTION' and value:
+                # Sometimes the description column spills over
+                match = re.search(r'^(\S*(\s\S+)*)(\n|\s{2,})', line[end:])
+                if match and match.group(1):
+                    value = value + match.group(1)
+                    end = end + len(match.group(1))
+                self.classification['description'] = value
+
+            elif colname == 'OBJ' and value:
+                self.classification['obj'] = value
+
+            elif colname in (u'# CNTRCT', u'# POS', u'AMOUNT'):
 
                 # For these columns, the value may be considerably offset
                 # off of the column headers.
@@ -50,7 +116,7 @@ class OperatingBudgetParser(object):
                 if (period, colname) in data.keys():
                     period = self.supercolumns[1]
                     if (period, colname) in data.keys():
-                        colname = (period, 'INC/DEC', colname)
+                        colname = (period, colname, 'INC/DEC')
                     else:
                         colname = (period, colname)
                 else:
@@ -60,12 +126,14 @@ class OperatingBudgetParser(object):
                 if len(value.split()) > 1:
                     value = value.split()[1]
 
-            data[colname] = value
+                value = self.process_value(value)
+                data[colname] = value
 
-            # Delete redundant data
-            if last_colname and data[last_colname] == value:
-                del data[last_colname]
-            last_colname = colname
+                # Delete redundant data
+                if last_colname and data[last_colname] == value:
+                    del data[last_colname]
+
+                last_colname = colname
 
             start = end
 
@@ -111,11 +179,8 @@ class OperatingBudgetParser(object):
 
         else:
             data = self.line2dict(line)
-            data.update(extra)
-            pprint({
-                'classification': classification,
-                'data': data
-            })
+            self.classification.update(extra)
+            self.output(classification, data)
 
 
 class PositionScheduleParser(object):

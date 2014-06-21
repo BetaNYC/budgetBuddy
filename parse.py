@@ -160,7 +160,7 @@ class OperatingBudgetParser(object):
                 self.supercolumn_dashes = line
 
         elif fields[0] == u'AGENCY:':
-            classification[u'agency'] = (fields[1], u' '.join(fields[3:]))
+            classification[u'agency'] = (fields[1], u' '.join(fields[2:]))
 
         elif fields[0:3] == [u'UNIT', u'OF', u'APPROPRIATION:']:
             classification[u'unit_of_appropriation'] = (fields[3], u' '.join(fields[4:]))

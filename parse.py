@@ -22,32 +22,51 @@ class OperatingBudgetParser(object):
         """
         start = 0
         data = {}
+        last_colname = ''
         for match in re.finditer(r'\s+|$', self.column_dashes):
             end = match.end()
-            value = line[start:end].strip()
 
             colname = self.columns[start:end].strip()
+            value = line[start:end].strip()
+            if not colname:
+                continue
 
             if colname in (u'# CNTRCT', u'# POS', u'AMOUNT'):
 
-                # These columns are sometimes offset
-                if len(line) > end and line[end] != ' ':
-                    # import pdb
-                    # pdb.set_trace()
-                    pass
+                # For these columns, the value may be considerably offset
+                # off of the column headers.
+                if value == '':
+                    # No value under column header, look ahead
+                    match = re.search(r'(\S+)\s', line[end:])
+                    if match:
+                        value = match.group(1)
+                elif len(line) > end and line[end] != ' ':
+                    # Value continues
+                    match = re.search(r'(\S+)\s', line[end:])
+                    if match:
+                        value = value + match.group(1)
 
                 period = self.supercolumns[0]
                 if (period, colname) in data.keys():
                     period = self.supercolumns[1]
                     if (period, colname) in data.keys():
-                        data[(period, 'INC/DEC', colname)] = value
+                        colname = (period, 'INC/DEC', colname)
                     else:
-                        data[(period, colname)] = value
+                        colname = (period, colname)
                 else:
-                    data[(period, colname)] = value
+                    colname = (period, colname)
 
-            else:
-                data[colname] = value
+                # Use second part of value, in case it spilled out
+                if len(value.split()) > 1:
+                    value = value.split()[1]
+
+            data[colname] = value
+
+            # Delete redundant data
+            if last_colname and data[last_colname] == value:
+                del data[last_colname]
+            last_colname = colname
+
             start = end
 
         return data

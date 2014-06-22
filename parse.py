@@ -30,37 +30,33 @@ class OperatingBudgetParser(object):
         """
         Convert values with commas and terminating minus signs to proper format
         """
-        try:
-            if not v:
-                return ''
-            if v[-1] == '-':
-                v = '-' + v[0:-1]
-            return Decimal(v.replace(',', ''))
-        except Exception as e:
-            import pdb
-            pdb.set_trace()
-            pass
+        if not v:
+            return ''
+        if v[-1] == '-':
+            v = '-' + v[0:-1]
+        return Decimal(v.replace(',', ''))
 
     def output(self, classification, data):
         for k, v in data.items():
-            self.csv_writer.writerow({
-                'agency_id': classification['agency'][0],
-                'agency_name': classification['agency'][1],
-                'responsibility_center_id': classification['responsibility_center'][0],
-                'responsibility_center_name': classification['responsibility_center'][1],
-                'budget_code_id': classification['budget_code'][0],
-                'budget_code_name': classification['budget_code'][1],
-                'object_class': classification['object_class'],
-                'ic_ref': classification['ic_ref'],
-                'obj': classification['obj'],
-                'description': classification['description'],
-                'file_name': classification['file_name'],
-                'source_line': classification['source_line'],
-                'budget_period': k[0],
-                'key': k[1],
-                'inc/dec': k[2] if len(k) > 2 else '',
-                'value': v
-            })
+            if v:
+                self.csv_writer.writerow({
+                    'agency_id': classification['agency'][0],
+                    'agency_name': classification['agency'][1],
+                    'responsibility_center_id': classification['responsibility_center'][0],
+                    'responsibility_center_name': classification['responsibility_center'][1],
+                    'budget_code_id': classification['budget_code'][0],
+                    'budget_code_name': classification['budget_code'][1],
+                    'object_class': classification['object_class'],
+                    'ic_ref': classification['ic_ref'],
+                    'obj': classification['obj'],
+                    'description': classification['description'],
+                    'file_name': classification['file_name'],
+                    'source_line': classification['source_line'],
+                    'budget_period': k[0],
+                    'key': k[1],
+                    'inc/dec': k[2] if len(k) > 2 else '',
+                    'value': v
+                })
 
     def line2dict(self, line):
         """
@@ -69,8 +65,12 @@ class OperatingBudgetParser(object):
         start = 0
         data = {}
         last_colname = ''
-        for i, match in enumerate(re.finditer(r'\s+|$', self.column_dashes)):
+
+        matches = [m for m in re.finditer(r'\s+|$', self.column_dashes)]
+
+        for i, match in enumerate(matches):
             end = match.end()
+            next_end = matches[i+1].end() if len(matches) > i + 1 else end
 
             colname = self.columns[start:end].strip()
             value = line[start:end].strip()
@@ -102,12 +102,13 @@ class OperatingBudgetParser(object):
                 # For these columns, the value may be considerably offset
                 # off of the column headers.
                 if value == '':
-                    # No value under column header, look ahead
-                    match = re.search(r'(\S+)\s', line[end:])
-                    if match:
-                        value = match.group(1)
+                    # No value under column header, look ahead to next column
+                    value = line[end:next_end].strip()
+                    if len(value.split()) > 1:
+                        value = value.split()[0]
+
                 elif len(line) > end and line[end] != ' ':
-                    # Value continues
+                    # Value continues into next column
                     match = re.search(r'(\S+)\s', line[end:])
                     if match:
                         value = value + match.group(1)
@@ -129,9 +130,9 @@ class OperatingBudgetParser(object):
                 value = self.process_value(value)
                 data[colname] = value
 
-                # Delete redundant data
+                # Delete redundant data if the prior column was a lookahead
                 if last_colname and data[last_colname] == value:
-                    del data[last_colname]
+                    data[last_colname] = ''
 
                 last_colname = colname
 

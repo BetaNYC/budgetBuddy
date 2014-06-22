@@ -92,8 +92,8 @@ billion](https://en.wikipedia.org/wiki/NYPD), so $3.9 seems pretty close, too.
 
 When querying, make sure to include `budget_period = 'EXECUTIVE BUDGET FY15 and
 `inc/dec` IS NULL` in order to query the most recent budget for absolute
-numbers, rather than increases/decreases.  You may also want to include `amount 
-> 0`, as there are some negative lines in there!
+numbers, rather than increases/decreases.  You may also want to include `amount > 0`,
+as there are some negative lines in there!
 
 You'll also want to limit by `key = '# POS'` if you're looking up employment
 counts, `key = 'AMOUNT'` if you're looking up spending, and `key = #CNTRCT`

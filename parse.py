@@ -88,10 +88,16 @@ class OperatingBudgetParser(object):
 
             elif colname == 'DESCRIPTION' and value:
                 # Sometimes the description column spills over
-                match = re.search(r'^(\S*(\s\S+)*)(\n|\s{2,})', line[end:])
-                if match and match.group(1):
-                    value = value + match.group(1)
-                    end = end + len(match.group(1))
+                if value[-1] == ' ':
+                    match = re.search(r'^(\S*(\s\S+)*)(\n|\s{2,})', line[end:])
+                    if match and match.group(1):
+                        value = value + match.group(1)
+                        end = end + len(match.group(1))
+                else:
+                    match = re.search(r'^(\S+(\s\S+)*)(\n|\s{2,})', line[end:])
+                    if match and match.group(1):
+                        value = value + match.group(1)
+                        end = end + len(match.group(1))
                 self.classification['description'] = value
 
             elif colname == 'OBJ' and value:
@@ -222,10 +228,8 @@ def scrape(f):
                     'file_name': f.name
                 })
             except Exception as e:
-                traceback.print_exc()
-                print e
-                import pdb
-                pdb.set_trace()
+                sys.stderr.write(traceback.format_exc() + u'\n')
+                sys.stderr.write(e + u'\n')
 
 
 if __name__ == '__main__':

@@ -3,30 +3,33 @@ budgetBuddy
 
 An API for more intuitive access to NYC Budget Data, current and historical
 
-The supporting schedules for each budget contain a treasure trove of data, down to the lowest level.  http://www.nyc.gov/html/omb/downloads/pdf/ss5_14.pdf
+The supporting schedules for each budget contain a treasure trove of data, down
+to the lowest level.  [http://www.nyc.gov/html/omb/downloads/pdf/ss5_14.pdf][]
 
-These PDFs are raw output from whatever budget system the city uses, and are very well structured making scraping much simpler.
+These PDFs are raw output from whatever budget system the city uses, and are
+very well structured making scraping much simpler.
 
-The immediate goal of this project is to scrape current and historical budget docs, move the data into a database, and build an intuitive REST api for querying different facets of the NYC budget.
+The immediate goal of this project is to scrape current and historical budget
+docs, move the data into a database, and build an intuitive REST api for
+querying different facets of the NYC budget.
 
 ...
 
 ### How to run the parser
 
-`python parse.py all.txt > out.csv`
+`python parse.py all.txt > data/2015.txt`
 
-You can use [csv2sqlite3](https://github.com/talos/csv2sqlite3) to convert the
-CSV to sqlite.
+You can use the bundled [csv2sqlite3](https://github.com/talos/csv2sqlite3) to
+convert the CSV to sqlite.
 
-`csv2sqlite3 out.csv`
+`python bin/csv2sqlite3.py data/2015.txt`
 
 ### Sample queries
 
-If you're in the `db-included` branch, the sqlite database is included, and you
-can do queries on it immediately!
+Once you've created the local SQLite database, you can run queries on it.
 
 ```
-    $ sqlite3 out.db
+    $ sqlite3 data/2015.db
     sqlite> select DESCRIPTION, SUM(value) from out where agency_name = 'DEPARTMENT OF EDUCATION' and key = '# POS' and budget_period = 'EXECUTIVE BUDGET FY15' and `inc/dec` is NULL GROUP BY DESCRIPTION;
     description                               SUM(value)
     ----------------------------------------  --------------------
@@ -132,3 +135,15 @@ $142M on books!  Who in the city loves to read so much?
 ```
 
 Elementary and middle schoolers, apparently.
+
+### Demo Server
+
+You can use the bundled sample server to preview the data in the browser, if
+you wish.
+
+```
+$ cd tmpserver
+$ npm install
+$ python ../bin/csv2sqlite3.py ../data/2015.db
+$ node server.js
+```

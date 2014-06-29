@@ -1,3 +1,4 @@
 node_modules
 *.db
 *.sql
+.DS_Store

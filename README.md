@@ -17,12 +17,12 @@ querying different facets of the NYC budget.
 
 ### How to run the parser
 
-`python parse.py all.txt > data/2015.txt`
+`python bin/parse.py data/raw/*.txt > data/processed/all.txt`
 
 You can use the bundled [csv2sqlite3](https://github.com/talos/csv2sqlite3) to
 convert the CSV to sqlite.
 
-`python bin/csv2sqlite3.py data/2015.txt`
+`python bin/csv2sqlite3.py data/processed/all.txt`
 
 Please note that the file name without the extension will be the table name in sqlite3
 
@@ -45,7 +45,7 @@ Also for ubuntu, if you do not have the sqlite3 command, use
 Once you've created the local SQLite database, you can run queries on it.
 
 ```
-    $ sqlite3 data/2015.db
+    $ sqlite3 data/all.db
     sqlite> select DESCRIPTION, SUM(value) from out where agency_name = 'DEPARTMENT OF EDUCATION' and key = '# POS' and budget_period = 'EXECUTIVE BUDGET FY15' and `inc/dec` is NULL GROUP BY DESCRIPTION;
     description                               SUM(value)
     ----------------------------------------  --------------------

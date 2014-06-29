@@ -31,7 +31,9 @@ So if you make the file name out.txt then the csv2sqlite3 python script will cre
 To make the following queries work you must use these commands:
 
 `python parse.py all.txt > data/out.txt`
+
 `python bin/csv2sqlite3.py data/out.txt`
+
 `sqlite3 data/out.txt`
 
 Also for ubuntu, if you do not have the sqlite3 command, use

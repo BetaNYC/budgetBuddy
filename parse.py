@@ -34,6 +34,7 @@ class OperatingBudgetParser(object):
             return ''
         if v[-1] == '-':
             v = '-' + v[0:-1]
+        #print 'QQQ:', v
         return Decimal(v.replace(',', ''))
 
     def output(self, classification, data):
@@ -59,6 +60,7 @@ class OperatingBudgetParser(object):
                 })
 
     def line2dict(self, line):
+        #print 'YYY', line
         """
         Convert line to dict via current columns.
         """
@@ -68,12 +70,17 @@ class OperatingBudgetParser(object):
 
         matches = [m for m in re.finditer(r'\s+|$', self.column_dashes)]
 
+        #print 'XXX', matches
         for i, match in enumerate(matches):
             end = match.end()
             next_end = matches[i+1].end() if len(matches) > i + 1 else end
 
             colname = self.columns[start:end].strip()
+            #print 'XXX1 colname:', colname
             value = line[start:end].strip()
+            #print 'XXX1 i:', i
+            #print 'XXX1 line:', line
+            #print 'XXX1 value:', value
             if not colname:
                 pass
 
@@ -133,6 +140,7 @@ class OperatingBudgetParser(object):
                 if len(value.split()) > 1:
                     value = value.split()[1]
 
+                #print 'VALUE: >>>', value , '<<<'
                 value = self.process_value(value)
                 data[colname] = value
 
@@ -147,6 +155,7 @@ class OperatingBudgetParser(object):
         return data
 
     def parse(self, line, fields, extra=None):
+        #print 'QQQINPUT:' , line
         classification = self.classification
         flush_to_margin = line[0] != ' '
         extra = extra if extra else {}
@@ -204,6 +213,8 @@ def scrape(f):
     operating_budget_parser = OperatingBudgetParser()
 
     for i, line in enumerate(f):
+        #print 'XXXqqq>>>',i,'<<<'
+        #print 'XXXqqq>>>',line,'<<<'
         fields = line.split()
 
         if not fields:
@@ -223,13 +234,20 @@ def scrape(f):
 
         elif parser:
             try:
+                #print 'qqq',line,i,f.name
+                #print 'qqq>>>',i,'<<<'
                 parser.parse(line, fields, extra={
                     'source_line': i+1,
                     'file_name': f.name
                 })
             except Exception as e:
-                sys.stderr.write(traceback.format_exc() + u'\n')
-                sys.stderr.write(e + u'\n')
+                try:
+                    sys.stderr.write(traceback.format_exc() + u'\n')
+                    sys.stderr.write(e + u'\n')
+                except Exception:
+                    pass
+                    # ignore
+                    
 
 
 if __name__ == '__main__':

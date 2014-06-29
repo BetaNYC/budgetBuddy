@@ -4,7 +4,7 @@ budgetBuddy
 An API for more intuitive access to NYC Budget Data, current and historical
 
 The supporting schedules for each budget contain a treasure trove of data, down
-to the lowest level.  [http://www.nyc.gov/html/omb/downloads/pdf/ss5_14.pdf][]
+to the lowest level.  [http://www.nyc.gov/html/omb/downloads/pdf/ss5_14.pdf]()
 
 These PDFs are raw output from whatever budget system the city uses, and are
 very well structured making scraping much simpler.

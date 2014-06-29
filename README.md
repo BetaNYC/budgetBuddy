@@ -24,6 +24,20 @@ convert the CSV to sqlite.
 
 `python bin/csv2sqlite3.py data/2015.txt`
 
+Please note that the file name without the extension will be the table name in sqlite3
+
+So if you make the file name out.txt then the csv2sqlite3 python script will create out.db in the same directory where the source out.txt is.
+
+To make the following queries work you must use these commands:
+
+`python parse.py all.txt > data/out.txt`
+`python bin/csv2sqlite3.py data/out.txt`
+`sqlite3 data/out.txt`
+
+Also for ubuntu, if you do not have the sqlite3 command, use
+`sudo apt-get install sqlite3`
+
+
 ### Sample queries
 
 Once you've created the local SQLite database, you can run queries on it.

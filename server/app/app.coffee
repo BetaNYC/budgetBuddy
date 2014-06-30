@@ -29,8 +29,6 @@ app.configure ->
     port = process.argv[process.argv.indexOf('-p') + 1]
 
   app.set 'port', port
-  app.set 'views', "#{__dirname}/views"
-  app.set 'view engine', 'ejs'
   app.use express.static("#{__dirname}/../public")
   app.use express.favicon()
   app.use express.logger('dev')

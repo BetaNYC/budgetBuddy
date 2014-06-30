@@ -33,7 +33,7 @@ String::classify = (str) ->
   classified.join('')
 
 # Output a response
-exports.output = (obj, rootElement, res, format)->
+exports.output = (obj, res, format)->
   # if obj has no elements then return a 404 error!
   if obj.length is 0
     res.send 404, "not found"
@@ -42,13 +42,3 @@ exports.output = (obj, rootElement, res, format)->
       when "json"
         res.type("application/json")
         res.send obj
-      when "xml"
-        xmlout        = require("easyxml")
-        xmlout.configure
-          manifest: true
-          rootElement: rootElement
-          objectRoot: "request"
-        res.setHeader "Content-Type", "text/xml; charset=utf-8"
-        res.send xmlout.render(obj)
-      else
-        res.send 404, ".xml or .json expected"

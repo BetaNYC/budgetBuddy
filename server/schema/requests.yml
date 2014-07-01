@@ -1,14 +1,14 @@
-resourcePath: '/requests'
+resourcePath: '/budget'
 apis:
   -
-    path: '/requests.json'
+    path: '/budget.json'
     operations:
       -
         httpMethod: 'GET'
-        nickname: 'getServiceRequests'
+        nickname: 'budget'
         responseClass: "void"
-        summary: "Query the current status of multiple requests."
-        notes: "See http://wiki.open311.org/GeoReport_v2#GET_Service_Requests"
+        summary: "Summar goes here"
+        notes: "Notes go here"
         parameters:
           -
             paramType: "query"

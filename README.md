@@ -30,6 +30,6 @@ $ npm install
 $ node server.js
 ```
 
-Now you can navigate to [http://localhost:3000/api/v1/2012/op/summary]() and
+Now you can navigate to [http://localhost:3000/v1/2012/op/summary.json]() and
 take a look at a year's worth of data.  You can change the year to look at
 other times in the set.

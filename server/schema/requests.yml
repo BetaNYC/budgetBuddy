@@ -1,11 +1,11 @@
-resourcePath: '/summary'
+resourcePath: '/budget'
 apis:
   -
-    path: '/summary.json'
+    path: '/budget.json'
     operations:
       -
         httpMethod: 'GET'
-        nickname: 'summary'
+        nickname: 'budget'
         responseClass: "void"
         summary: "Summar goes here"
         notes: "Notes go here"

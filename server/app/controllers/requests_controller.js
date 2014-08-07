@@ -6,7 +6,7 @@ module.exports = function(app) {
     function RequestsController() {}
 
     RequestsController.citySummary = function(req, res) {
-      var db = new sqlite3.Database('../data/processed/all.db');
+      var db = new sqlite3.Database('../../data/processed/all.db');
       var summary = [];
       // BAD BAD BAD, we should use real SQL params.  But this is just a demo.
       var year = Number(req.params.year) - 2000;

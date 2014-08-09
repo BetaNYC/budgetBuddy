@@ -1,12 +1,15 @@
 var _ = require("underscore");
 var sqlite3 = require('sqlite3').verbose();
-var dbPath = __dirname + '/../../data/processed/all.db';
-var db = new sqlite3.Database(dbPath);
-var basePath =
+
 
 module.exports = function(app) {
   return app.API = (function() {
     function API() {}
+
+    console.log(app.dbPath);
+    var dbPath = __dirname + app.dbPath;
+    var db = new sqlite3.Database(dbPath);
+    var basePath = app.basePath;
 
     API.citySummary = function(req, res) {
       var summary = [];

@@ -55,6 +55,7 @@ app.configure('development', function() {
   return app.use(express.errorHandler());
 });
 
+require("" + __dirname + "/app/helpers.js")(app);
 require("" + __dirname + "/app/api.js")(app);
 require("" + __dirname + "/app/routes.js")(app);
 

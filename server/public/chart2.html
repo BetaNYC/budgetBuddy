@@ -8,7 +8,7 @@ var width = 960,
     height = 500;
 
 var color = d3.scale.category10();
-var radiusScale = d3.scale.pow().exponent(0.5).domain([0, 44070000000]).range([4, 150])
+var radiusScale = d3.scale.pow().exponent(0.5).domain([0, 44070000000]).range([5, 100])
 
 d3.json('/v1/2014/op/summary.json',function (data) {
 
@@ -22,7 +22,10 @@ var force = d3.layout.force()
     .gravity(0.04)
     //.charge(function(d, i) { return i ? 0 : -2000; })
     .charge(function(d){
+      if (d.highlighted) { return (-Math.pow(d.radius, 2.0) / 20) - 300 }
+        else {
       return -Math.pow(d.radius, 2.0) / 20;
+    }
     })
     .nodes(data)
     .size([width, height]);
@@ -40,6 +43,14 @@ svg.selectAll("circle")
   .enter().append("circle")
     .attr("r", function(d) { return d.radius; })
     .style("fill", function(d, i) { return color(i % 3); })
+    .on("mouseover",function(d){
+      d.highlighted = true;
+      force.start();
+    })
+    .on("mouseout",function(d){
+      d.highlighted = false;
+      force.start();
+    })
     .call(force.drag);
 
 force.on("tick", function(e) {

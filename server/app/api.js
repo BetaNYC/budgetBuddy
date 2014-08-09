@@ -6,8 +6,9 @@ module.exports = function(app) {
   return app.API = (function() {
     function API() {}
 
-    console.log(app.dbPath);
-    var dbPath = __dirname + app.dbPath;
+
+    var dbPath = __dirname + "/" + app.dbPath;
+    console.log(dbPath);
     var db = new sqlite3.Database(dbPath);
     var basePath = app.basePath;
 
@@ -17,9 +18,9 @@ module.exports = function(app) {
       var year = Number(req.params.year) - 2000;
 
       var statement = "select agency_id, agency_name, sum(value) " +
-                      "from `all` " +
+                      "from `alladopted` " +
                       "where " +
-                      "budget_period = 'EXECUTIVE BUDGET FY" + year + "' and " +
+                      "budget_period = 'ADOPTED BUDGET FY" + year + "' and " +
                       "`inc/dec` is null and " +
                       "key = 'AMOUNT' " +
                       "group by agency_name " +
@@ -44,9 +45,9 @@ module.exports = function(app) {
       var year = Number(req.params.year) - 2000;
 
       var statement = "select  responsibility_center_name, responsibility_center_name, sum(value) " +
-                      "from `all` " +
+                      "from `alladopted` " +
                       "where " +
-                      "budget_period = 'EXECUTIVE BUDGET FY" + year + "' and " +
+                      "budget_period = 'ADOPTED BUDGET FY" + year + "' and " +
                       "`inc/dec` is null and " +
                       "agency_id = " + req.params.agency + " and " +
                       "key = 'AMOUNT' " +

@@ -3,29 +3,22 @@
   , "version": "0.0.1"
   , "description": "A nodejs adapter to NYC budget"
   , "dependencies": {
-      "express": "3.0.0beta4"
-    , "connect-assets": "2.1.x"
-    , "express-partials": ">= 0.0.5"
+      "express": "~3.2.3"
     , "ejs": "*"
     , "underscore": "*"
     , "underscore.string": "*"
-    , "stylus": "*"
-    , "coffee-script": "*"
-    , "easyxml": "https://github.com/volkanunsal/node-easyxml/tarball/master"
-    , "express": "~3.2.3"
     , "swagger-jack": "1.6.0"
     , "js-yaml": "*"
     , "moment": "*"
     , "request": "*"
     , "event-stream": "*"
     , "JSONStream": "*"
-    , "bootstrap-stylus": "*"
     , "nib": "*"
     , "nodemon": "*"
+    , "sqlite3": "2.2.7"
   }
   , "devDependencies": {
-      "vows": "0.5.x"
-    , "mocha" : "*"
+    "mocha" : "*"
   }
   , "scripts": {
       "start": "server.js"
@@ -44,7 +37,7 @@
     , "budget"
     , "nyc"
   ]
-  , "author": "Volkan Unsal"
+  , "authors": ["Volkan Unsal", "Chris Whong", "John Krauss"]
   , "license": "MIT"
   , "readmeFilename": "README.md"
 }

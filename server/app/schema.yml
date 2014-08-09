@@ -1,13 +1,13 @@
 resourcePath: '/budget'
 apis:
   -
-    path: '/budget.json'
+    path: "/budget.json"
     operations:
       -
         httpMethod: 'GET'
         nickname: 'budget'
         responseClass: "void"
-        summary: "Summar goes here"
+        summary: "Summary goes here"
         notes: "Notes go here"
         parameters:
           -

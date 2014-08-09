@@ -1,14 +1,14 @@
 var _ = require("underscore");
 var sqlite3 = require('sqlite3').verbose();
+var dbPath = __dirname + '/../../data/processed/all.db';
+var db = new sqlite3.Database(dbPath);
+var basePath =
 
 module.exports = function(app) {
   return app.API = (function() {
     function API() {}
 
     API.citySummary = function(req, res) {
-      var dbPath = __dirname + '/../../data/processed/all.db';
-      console.log(dbPath);
-      var db = new sqlite3.Database(dbPath);
       var summary = [];
       // BAD BAD BAD, we should use real SQL params.  But this is just a demo.
       var year = Number(req.params.year) - 2000;
@@ -25,7 +25,7 @@ module.exports = function(app) {
       db.serialize(function() {
         db.each(statement, function(err, result) {
           if (err) { console.log(err); }
-          result.more = 'http://localhost:3000/v1/2014/op/' + result.agency_id + '/summary.json'
+          result.more = app.basePath + '/v1/2014/op/' + result.agency_id + '/summary.json'
           summary.push(result);
         }, function(){
           var obj = summary;
@@ -36,7 +36,6 @@ module.exports = function(app) {
     };
 
     API.agencySummary = function(req, res) {
-      var db = new sqlite3.Database('../data/processed/all.db');
       var summary = [];
       // BAD BAD BAD, we should use real SQL params.  But this is just a demo.
       var year = Number(req.params.year) - 2000;

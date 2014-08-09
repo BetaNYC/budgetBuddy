@@ -11,7 +11,7 @@ http = require('http');
 app = express();
 app.currentEnv = process.env.NODE_ENV || 'development';
 
-var basePath = env[app.currentEnv]["base_path"]
+app.basePath = env[app.currentEnv]["base_path"];
 
 swagger = require('swagger-jack');
 
@@ -22,7 +22,7 @@ configureSwagger = function(env) {
   var descriptor, resources;
   descriptor = {
     apiVersion: '1.0',
-    basePath: basePath
+    basePath: app.basePath
   };
   // FIXME: the schema is not parsed like a yml, but like json file.
   var schema = yaml.safeLoad(fs.readFileSync("" + __dirname + "/app/schema.yml"));

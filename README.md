@@ -1,10 +1,11 @@
-budgetBuddy
+BudgetBuddy
 ===========
 
 An API for more intuitive access to NYC Budget Data, current and historical
 
-The supporting schedules for each budget contain a treasure trove of data, down
-to the lowest level.  [http://www.nyc.gov/html/omb/downloads/pdf/ss5_14.pdf]()
+The supporting schedules for each budget contain a treasure trove of data, down to the lowest level.
+
+  http://www.nyc.gov/html/omb/downloads/pdf/ss5_14.pdf
 
 These PDFs are raw output from whatever budget system the city uses, and are
 very well structured making scraping much simpler.
@@ -22,12 +23,10 @@ you wish.  Make sure to grab the submodules first, then you'll be able to
 convert the text file to SQL for the server.
 
 ```
-$ git submodule init data
-$ git submodule update data
+$ git clone git@github.com:BetaNYC/budgetBuddyData.git
 $ python data/bin/csv2sqlite3.py data/processed/all.txt
-$ cd tmpserver
 $ npm install
-$ node server.js
+$ npm start
 ```
 
 Now you can navigate to [http://localhost:3000/v1/2012/op/summary.json]() and

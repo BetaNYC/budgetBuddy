@@ -6,7 +6,7 @@ module.exports = function(app) {
   return app.API = (function() {
     function API() {}
 
-
+    
     var dbPath = __dirname + "/" + app.dbPath;
     console.log(dbPath);
     var db = new sqlite3.Database(dbPath);

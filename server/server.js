@@ -10,7 +10,7 @@ var fs   = require('fs');
 http = require('http');
 app = express();
 app.currentEnv = process.env.NODE_ENV || 'development';
-
+  
 app.basePath = env[app.currentEnv]["base_path"];
 app.dbPath = env[app.currentEnv]["db_path"];
 

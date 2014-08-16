@@ -5,8 +5,7 @@ node_modules
 .DS_Store
 /data/*
 /db
-!/data/processed
-
+  
 lib-cov
 *.seed
 *.log

@@ -4,6 +4,7 @@ node_modules
 *.sql
 .DS_Store
 /data/*
+/db
 !/data/processed
 
 lib-cov

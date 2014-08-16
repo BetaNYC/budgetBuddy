@@ -3,7 +3,8 @@
   , "version": "0.0.1"
   , "description": "A nodejs adapter to NYC budget"
   , "dependencies": {
-      "express": "~3.2.3"
+      "express": "~4.0.0"
+    , "body-parser": "~1.0.1"
     , "ejs": "*"
     , "underscore": "*"
     , "underscore.string": "*"
@@ -21,7 +22,7 @@
     "mocha" : "*"
   }
   , "scripts": {
-      "start": "nodemon server/server.js -p 3000"
+      "start": "nodemon server.js -p 3000"
     , "fetch_data": "rm -rf data && git clone git@github.com:BetaNYC/budgetBuddyData.git data && python data/bin/csv2sqlite3.py data/processed/all.txt"
     , "test": "cake test"
   }

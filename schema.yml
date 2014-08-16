@@ -37,25 +37,3 @@ apis:
             name: "status"
             dataType: "string"
             description: "comma-delimited ['open','closed']"
-  # -
-  #   path: "/requests/{service_request_id}.{format}"
-  #   operations:
-  #   -
-  #     httpMethod: 'GET'
-  #     nickname: 'getServiceRequest'
-  #     responseClass: "void"
-  #     summary: "Query the current status of an individual request."
-  #     notes: "See http://wiki.open311.org/GeoReport_v2#GET_Service_Request"
-  #     parameters:
-  #       -
-  #         paramType: "path"
-  #         name: "service_request_id"
-  #         required: true
-  #         dataType: "string"
-  #         description: "The unique ID of the service request created."
-  #         allowMultiple: false
-  #       -
-  #         paramType: "query"
-  #         name: "jurisdiction_id"
-  #         dataType: "string"
-  #         description: "This is only required if the endpoint serves multiple jurisdictions."

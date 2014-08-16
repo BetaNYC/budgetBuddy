@@ -3,9 +3,9 @@ node_modules
 *.db
 *.sql
 .DS_Store
-/data/*
+/data
 /db
-  
+
 lib-cov
 *.seed
 *.log

@@ -23,8 +23,6 @@ you wish.  Make sure to grab the submodules first, then you'll be able to
 convert the text file to SQL for the server.
 
 ```
-$ git clone git@github.com:BetaNYC/budgetBuddyData.git
-$ python data/bin/csv2sqlite3.py data/processed/all.txt
 $ npm install
 $ npm start
 ```

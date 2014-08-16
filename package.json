@@ -22,7 +22,7 @@
   }
   , "scripts": {
       "start": "nodemon server/server.js -p 3000"
-    , "preinstall": "rm -rf data && git clone git@github.com:BetaNYC/budgetBuddyData.git data && python data/bin/csv2sqlite3.py data/processed/all.txt"
+    , "fetch_data": "rm -rf data && git clone git@github.com:BetaNYC/budgetBuddyData.git data && python data/bin/csv2sqlite3.py data/processed/all.txt"
     , "test": "cake test"
   }
   , "engines": {

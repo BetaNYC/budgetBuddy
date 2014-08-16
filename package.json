@@ -21,8 +21,8 @@
     "mocha" : "*"
   }
   , "scripts": {
-      "start": "server.js"
-    , "test": "cake test"
+      "start": "nodemon server/server.js -p 3000"
+    , "test": "server/cake test"
   }
   , "engines": {
       "node": "0.8.14"

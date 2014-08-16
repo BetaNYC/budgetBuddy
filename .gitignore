@@ -1,5 +1,7 @@
 node_modules
+*.log
 *.db
 *.sql
 .DS_Store
-/data
+/data/*
+!/data/processed

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
         "status": "Alpha",
         "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_fp2jR45Rg0bxHeTG961N_0EiqVEO9He7RdgxmIXy9FrM3vBA",
         "geography": "NYC",
@@ -11,4 +12,17 @@
                 {"category": "Transparency"},
                 {"category": "Open Data"}
         ]
+=======
+  "status": "Alpha",
+  "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_fp2jR45Rg0bxHeTG961N_0EiqVEO9He7RdgxmIXy9FrM3vBA",
+  "geography": "NYC",
+  "type":"API",
+  "needs": [],
+  "categories": [
+    {"category": "Budget"},
+    {"category": "Finance"},
+    {"category": "Transparency"},
+    {"category": "Open Data"}
+  ]
+>>>>>>> e560b8c656e16a2d58ca080cad496f7220b7174e
 }

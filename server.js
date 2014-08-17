@@ -42,7 +42,7 @@ var router = express.Router();        // get an instance of the express Router
 // test route to make sure everything is working (accessed at GET http://localhost:3000/v1)
 
 // citySummary
-router.get('/:year/op/summary.:format', function(req, res) {
+router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 
   var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
@@ -61,7 +61,7 @@ router.get('/:year/op/summary.:format', function(req, res) {
   db.serialize(function() {
     db.each(statement, function(err, result) {
       if (err) { console.log(err); }
-      result.more = app.basePath + '/v1/2014/op/' + result.agency_id + '/summary.json'
+      result.more = app.basePath + '/v1/year/2014/budget/op/agency/' + result.agency_id + '/summary.json'
       summary.push(result);
     }, function(){
       // When the serialization is done, return the array as a JSON.
@@ -71,7 +71,7 @@ router.get('/:year/op/summary.:format', function(req, res) {
 });
 
 // agencySummary
-router.get('/:year/op/:agency/summary.:format', function(req, res) {
+router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req, res) {
 
   var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
@@ -86,11 +86,13 @@ router.get('/:year/op/:agency/summary.:format', function(req, res) {
                   "group by unit_of_appropriation_name " +
                   "order by sum(value) DESC ";
 
+  console.log(statement);
   // Serialize the query result.
   var summary = [];
   db.serialize(function() {
     db.each(statement, function(err, result) {
       if (err) { console.log(err); }
+       result.more = app.basePath + '/v1/year/2014/budget/op/agency/' + req.params.agency + '/uoa/' + result.unit_of_appropriation_id + '/summary.json'
       summary.push(result);
     }, function(){
       // When the serialization is done, return the array as a JSON.
@@ -101,14 +103,49 @@ router.get('/:year/op/:agency/summary.:format', function(req, res) {
 
 
 // uoaSummary
-router.get('/:year/op/:agency/:unitOfAppropriation/summary.:format', function(req, res) {
+router.get('/year/:year/budget/op/agency/:agency/uoa/:unitOfAppropriation/summary.:format', function(req, res) {
 
   var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
 
   var statement = "select  responsibility_center_name, responsibility_center_id, sum(value) " +
-    "from `alladopted` " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "`inc/dec` is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by unit_of_appropriation_name " + "order by sum(value) DESC ";
+    "from `alladopted` " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "`inc/dec` is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by responsibility_center_name " + "order by sum(value) DESC ";
 
+  console.log(statement);
+  // Serialize the query result.
+  var summary = [];
+  db.serialize(function() {
+    db.each(statement, function(err, result) {
+      if (err) { console.log(err); }
+      result.more = app.basePath + '/v1/year/2014/budget/op/agency/' + req.params.agency + '/uoa/' + req.params.unitOfAppropriation + '/rc/' + result.responsibility_center_id +  '/summary.json'
+
+      summary.push(result);
+    }, function(){
+      // When the serialization is done, return the array as a JSON.
+      return res.json(summary);
+    })
+  });
+});
+
+// rcSummary
+router.get('/year/:year/budget/op/agency/:agency/uoa/:unitOfAppropriation/rc/:responsibilityCenter/summary.:format', function(req, res) {
+
+  var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
+  var year = Number(req.params.year) - 2000;
+
+  var statement = "select  budget_code_name, budget_code_id, sum(value) " 
+  + "from `alladopted` " 
+  + "where " 
+  + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " 
+  + "`inc/dec` is null and " 
+  + "agency_id = " + req.params.agency + " and " 
+  + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " 
+  + "responsibility_center_id = " + req.params.responsibilityCenter + " and "
+  + "key = 'AMOUNT' " 
+  + "group by budget_code_name " 
+  + "order by sum(value) DESC ";
+
+  console.log(statement);
   // Serialize the query result.
   var summary = [];
   db.serialize(function() {

@@ -21,7 +21,9 @@
   }
   , "scripts": {
       "start": "nodemon server.js -p 3000"
-    , "fetch_data": "rm -rf data && git clone git@github.com:BetaNYC/budgetBuddyData.git data && python data/bin/csv2sqlite3.py data/processed/all.txt"
+    , "fetch_data": "cake fetch_data"
+    , "prepare_sqlite": "cake prepare_sqlite"
+    , "prepare_postgres": "cake prepare_postgres"
     , "test": "cake test"
   }
   , "engines": {

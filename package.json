@@ -21,9 +21,7 @@
   }
   , "scripts": {
       "start": "nodemon server.js -p 3000"
-    , "fetch_data": "cake fetch_data"
-    , "prepare_sqlite": "cake prepare_sqlite"
-    , "prepare_postgres": "cake prepare_postgres"
+    , "setup_dev": "cake fetch_data && cake prepare_sqlite"
     , "test": "cake test"
   }
   , "engines": {

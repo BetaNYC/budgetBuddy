@@ -1,5 +1,5 @@
 module.exports = function (app) {
-  
+
   app.configureSwagger = function(env) {
     var descriptor, resources;
     descriptor = {

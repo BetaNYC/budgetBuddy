@@ -12,8 +12,6 @@
     , "js-yaml": "*"
     , "moment": "*"
     , "request": "*"
-    , "event-stream": "*"
-    , "JSONStream": "*"
     , "nib": "*"
     , "nodemon": "*"
     , "sqlite3": "2.2.7"

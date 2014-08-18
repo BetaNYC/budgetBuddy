@@ -1,29 +1,6 @@
 node_modules
-<<<<<<< HEAD
 *.db
 *.sql
 .DS_Store
 /data
-=======
-*.log
-*.db
-*.sql
-.DS_Store
-/data
-/db
 
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-LOG
-
-pids
-logs
-results
-
->>>>>>> e560b8c656e16a2d58ca080cad496f7220b7174e

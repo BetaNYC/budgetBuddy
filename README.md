@@ -1,4 +1,5 @@
-budgetBuddy
+
+BudgetBuddy
 ===========
 
 An API for more intuitive access to NYC Budget Data, current and historical
@@ -22,12 +23,11 @@ you wish.  Make sure to grab the submodules first, then you'll be able to
 convert the text file to SQL for the server.
 
 ```
-$ git submodule init data
-$ git submodule update data
-$ python data/bin/csv2sqlite3.py data/processed/all.txt
-$ cd tmpserver
+
+$ npm run setup_dev
 $ npm install
-$ node server.js
+$ npm start
+
 ```
 
 Now you can navigate to [http://localhost:3000/v1/2012/op/summary.json]() and

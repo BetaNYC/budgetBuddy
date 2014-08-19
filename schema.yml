@@ -1,0 +1,39 @@
+resourcePath: '/budget'
+apis:
+  -
+    path: "/budget.json"
+    operations:
+      -
+        httpMethod: 'GET'
+        nickname: 'budget'
+        responseClass: "void"
+        summary: "Summary goes here"
+        notes: "Notes go here"
+        parameters:
+          -
+            paramType: "query"
+            name: "service_request_id"
+            required: false
+            dataType: "string"
+            description: "The unique ID of the service request created."
+            allowMultiple: true
+          -
+            paramType: "query"
+            name: "service_code"
+            dataType: "string"
+            description: "The unique identifier for the service request type. Default is 'all'"
+          -
+            paramType: "query"
+            name: "start_date"
+            dataType: "string"
+            description: "Must not be more than 90 days from end_date"
+          -
+            paramType: "query"
+            name: "end_date"
+            dataType: "string"
+            description: "Must not be more than 90 days from start_date"
+          -
+            paramType: "query"
+            name: "status"
+            dataType: "string"
+            description: "comma-delimited ['open','closed']"

@@ -40,7 +40,7 @@ app.use(express.static(__dirname + '/public'));
 var router = express.Router();        // get an instance of the express Router
 
 // test route to make sure everything is working (accessed at GET http://localhost:3000/v1)
-  
+
 // citySummary
 router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 
@@ -61,7 +61,7 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
   db.serialize(function() {
     db.each(statement, function(err, result) {
       if (err) { console.log(err); }
-      result.more = app.basePath + '/v1/2014/op/' + result.agency_id + '/summary.json'
+      result.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + result.agency_id + '/summary.json'
       summary.push(result);
     }, function(){
       // When the serialization is done, return the array as a JSON.

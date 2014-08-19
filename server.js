@@ -11,6 +11,7 @@ var fs         = require('fs');
 var http       = require('http');
 var swagger    = require('swagger-jack');
 var yaml       = require('js-yaml');
+var db         = require('./models')
 
 
 
@@ -138,5 +139,12 @@ app.use('/v1', router);
 
 // START THE SERVER
 // =============================================================================
-app.listen(port);
-console.log('Express server listening on port ' + port);
+
+db.sequelize.sync({ force: true }).complete(function(err) {
+  if (err) {
+    throw err[0]
+  } else {
+    app.listen(port);
+    console.log('Express server listening on port ' + port);
+  }
+});

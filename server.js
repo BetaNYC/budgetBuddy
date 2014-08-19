@@ -61,7 +61,7 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
   db.sequelize.query(statement).success(function(result) {
     // Add the more field to each row
     result.map(function(row) {
-      row.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + result.agency_id + '/summary.json';
+      row.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + 'agency/' + row.agency_id + '/summary.json';
     })
     summary = result;
 

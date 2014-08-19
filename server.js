@@ -24,7 +24,7 @@ var port = process.env.PORT || 3000;
 // APPLICATION
 app.currentEnv  = process.env.NODE_ENV || 'development';
 app.basePath    = env[app.currentEnv]["base_path"];
-app.dbPath      = env[app.currentEnv]["db_path"];
+app.database    = env[app.currentEnv]["database"];
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,7 +45,6 @@ var router = express.Router();        // get an instance of the express Router
 // citySummary
 router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 
-  var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
 
   var statement = "select agency_id, agency_name, sum(value) " +
@@ -75,7 +74,6 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 // agencySummary
 router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req, res) {
 
-  var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
 
   var statement = "select  unit_of_appropriation_name, unit_of_appropriation_id, sum(value) " +
@@ -104,7 +102,6 @@ router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req,
 // uoaSummary
 router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format', function(req, res) {
 
-  var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
 
   var statement = "select  responsibility_center_name, responsibility_center_id, sum(value) " +

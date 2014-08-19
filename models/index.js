@@ -2,8 +2,20 @@ var fs        = require('fs')
   , path      = require('path')
   , Sequelize = require('sequelize')
   , lodash    = require('lodash')
-  , sequelize = new Sequelize('sequelize_test', 'root', null)
-  , db        = {}
+  , env       = require(__dirname + "../env.json")
+  , db        = {};
+
+if(process.env.NODE_ENV == "development"){
+  var path = env[process.env.NODE_ENV].database;
+  var sequelize = new Sequelize('alladopted', null, null, {storage: path, dialect: "sqlite"});
+}else{
+  // WIP
+  var sequelize = new Sequelize('alladopted', 'postgres', 'postgres');
+}
+
+
+
+
 
 fs
   .readdirSync(__dirname)

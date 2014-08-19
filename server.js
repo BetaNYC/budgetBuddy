@@ -40,9 +40,9 @@ app.use(express.static(__dirname + '/public'));
 var router = express.Router();        // get an instance of the express Router
 
 // test route to make sure everything is working (accessed at GET http://localhost:3000/v1)
-
+  
 // citySummary
-router.get('/:year/op/summary.:format', function(req, res) {
+router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 
   var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
@@ -70,8 +70,9 @@ router.get('/:year/op/summary.:format', function(req, res) {
   });
 });
 
+
 // agencySummary
-router.get('/:year/op/:agency/summary.:format', function(req, res) {
+router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req, res) {
 
   var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
@@ -99,9 +100,8 @@ router.get('/:year/op/:agency/summary.:format', function(req, res) {
   });
 });
 
-
 // uoaSummary
-router.get('/:year/op/:agency/:unitOfAppropriation/summary.:format', function(req, res) {
+router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format', function(req, res) {
 
   var db = new sqlite3.Database(__dirname + "/" + app.dbPath);
   var year = Number(req.params.year) - 2000;
@@ -122,6 +122,13 @@ router.get('/:year/op/:agency/:unitOfAppropriation/summary.:format', function(re
   });
 });
 
+
+
+// rcSummary
+router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/rc/:rc/summary.:format', function(req,res) {});
+
+//ocSummary
+router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/rc/:rc/bc/:bc/summary.:format', function(req,res) {});
 
 
 

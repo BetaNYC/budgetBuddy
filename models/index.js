@@ -5,16 +5,8 @@ var fs        = require('fs')
   , env       = require(__dirname + "/../env.json")
   , db        = {};
 
-if(process.env.NODE_ENV == "development"){
-  var storage_path = env[process.env.NODE_ENV].database;
-  var sequelize = new Sequelize('alladopted', null, null, {storage: storage_path, dialect: "sqlite"});
-}else{
-  // WIP
-  // var sequelize = new Sequelize('alladopted', 'postgres', 'postgres');
-}
-
-
-
+// wip
+var sequelize = new Sequelize('budgetbuddy', 'postgres', 'postgres', {dialect: "postgres"});
 
 
 fs

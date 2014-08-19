@@ -47,17 +47,18 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 
   var year = Number(req.params.year) - 2000;
 
-  var statement = "select agency_id, agency_name, sum(value) " +
-                  "from `alladopted` " +
+  var statement = "select agency_id, agency_name, value " +
+                  "from alladopted " +
                   "where " +
                   "budget_period = 'ADOPTED BUDGET FY" + year + "' and " +
-                  "`inc/dec` is null and " +
+                  "inc_dec is null and " +
                   "key = 'AMOUNT' " +
                   "group by agency_name " +
-                  "order by sum(value) DESC ";
+                  "order by value DESC ";
 
   // Serialize the query result.
-  db.sequelize.query(statement).success(function(result) {
+  // db.sequelize.query(statement).success(function(result) {
+  db.AllAdopted.findAll({where: {budget_period: "ADOPTED BUDGET FY" + year, inc_dec: null, key: "AMOUNT"}, attributes: ["agency_id", "agency_name", "value"], order: "value DESC"}).success(function(result) {
     // Add the more field to each row
     result.map(function(row) {
       row.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + 'agency/' + row.agency_id + '/summary.json';
@@ -75,19 +76,19 @@ router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req,
 
   var year = Number(req.params.year) - 2000;
 
-  var statement = "select  unit_of_appropriation_name, unit_of_appropriation_id, sum(value) " +
-                  "from `alladopted` " +
+  var statement = "select  unit_of_appropriation_name, unit_of_appropriation_id, value " +
+                  "from alladopted " +
                   "where " +
                   "budget_period = 'ADOPTED BUDGET FY" + year + "' and " +
-                  "`inc/dec` is null and " +
+                  "inc_dec is null and " +
                   "agency_id = " + req.params.agency + " and " +
                   "key = 'AMOUNT' " +
                   "group by unit_of_appropriation_name " +
-                  "order by sum(value) DESC ";
+                  "order by value DESC ";
 
   // Serialize the query result.
   db.sequelize.query(statement).success(function(result) {
-
+  // db.AllAdopted.findAll({attributes: ["unit_of_appropriation_name", "unit_of_appropriation_id"]}).success(function(result) {
     // When the serialization is done, return the array as a JSON.
     return res.json(result);
   })
@@ -99,8 +100,8 @@ router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format', func
 
   var year = Number(req.params.year) - 2000;
 
-  var statement = "select  responsibility_center_name, responsibility_center_id, sum(value) " +
-    "from `alladopted` " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "`inc/dec` is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by unit_of_appropriation_name " + "order by sum(value) DESC ";
+  var statement = "select responsibility_center_name, responsibility_center_id, value " +
+    "from alladopted " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "inc_dec is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by unit_of_appropriation_name " + "order by value DESC ";
 
   // Serialize the query result.
   db.sequelize.query(statement).success(function(result) {

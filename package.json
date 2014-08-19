@@ -15,7 +15,7 @@
     , "nib": "*"
     , "sequelize": "*"
     , "nodemon": "*"
-    , "sqlite3": "2.2.7"
+    , "pg": "*"
   }
   , "devDependencies": {
     "mocha" : "*"

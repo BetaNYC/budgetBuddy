@@ -2,15 +2,15 @@ var fs        = require('fs')
   , path      = require('path')
   , Sequelize = require('sequelize')
   , lodash    = require('lodash')
-  , env       = require(__dirname + "../env.json")
+  , env       = require(__dirname + "/../env.json")
   , db        = {};
 
 if(process.env.NODE_ENV == "development"){
-  var path = env[process.env.NODE_ENV].database;
-  var sequelize = new Sequelize('alladopted', null, null, {storage: path, dialect: "sqlite"});
+  var storage_path = env[process.env.NODE_ENV].database;
+  var sequelize = new Sequelize('alladopted', null, null, {storage: storage_path, dialect: "sqlite"});
 }else{
   // WIP
-  var sequelize = new Sequelize('alladopted', 'postgres', 'postgres');
+  // var sequelize = new Sequelize('alladopted', 'postgres', 'postgres');
 }
 
 

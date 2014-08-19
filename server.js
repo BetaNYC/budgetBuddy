@@ -58,16 +58,17 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 
   // Serialize the query result.
   var summary = [];
-  db.serialize(function() {
-    db.each(statement, function(err, result) {
-      if (err) { console.log(err); }
-      result.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + result.agency_id + '/summary.json'
-      summary.push(result);
-    }, function(){
-      // When the serialization is done, return the array as a JSON.
-      return res.json(summary);
+  db.sequelize.query(statement).success(function(result) {
+    // Add the more field to each row
+    result.map(function(row) {
+      row.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + result.agency_id + '/summary.json';
     })
-  });
+    summary = result;
+
+    // When the serialization is done, return the array as a JSON.
+    return res.json(summary);
+  })
+
 });
 
 
@@ -88,15 +89,13 @@ router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req,
 
   // Serialize the query result.
   var summary = [];
-  db.serialize(function() {
-    db.each(statement, function(err, result) {
-      if (err) { console.log(err); }
-      summary.push(result);
-    }, function(){
-      // When the serialization is done, return the array as a JSON.
-      return res.json(summary);
-    })
-  });
+  db.sequelize.query(statement).success(function(result) {
+    summary.push(result);
+
+    // When the serialization is done, return the array as a JSON.
+    return res.json(summary);
+  })
+
 });
 
 // uoaSummary
@@ -109,15 +108,13 @@ router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format', func
 
   // Serialize the query result.
   var summary = [];
-  db.serialize(function() {
-    db.each(statement, function(err, result) {
-      if (err) { console.log(err); }
-      summary.push(result);
-    }, function(){
-      // When the serialization is done, return the array as a JSON.
-      return res.json(summary);
-    })
-  });
+  db.sequelize.query(statement).success(function(result) {
+    summary.push(result);
+
+    // When the serialization is done, return the array as a JSON.
+    return res.json(summary);
+  })
+
 });
 
 

@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     , obj: DataTypes.STRING
     , description: DataTypes.STRING
     , budget_period: DataTypes.STRING
-    , "inc\dec": DataTypes.STRING
+    , "inc/dec": DataTypes.STRING
     , key: DataTypes.STRING
     , value: DataTypes.INTEGER
     , file_name: DataTypes.STRING

@@ -21,7 +21,7 @@
     "mocha" : "*"
   }
   , "scripts": {
-      "start": "nodemon server.js -p 3000"
+      "start": "NODE_ENV=development nodemon server.js -p 3000"
     , "setup_dev": "cake fetch_data && cake prepare_sqlite"
     , "test": "cake test"
   }

@@ -57,16 +57,14 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
                   "order by sum(value) DESC ";
 
   // Serialize the query result.
-  var summary = [];
   db.sequelize.query(statement).success(function(result) {
     // Add the more field to each row
     result.map(function(row) {
       row.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + 'agency/' + row.agency_id + '/summary.json';
     })
-    summary = result;
 
     // When the serialization is done, return the array as a JSON.
-    return res.json(summary);
+    return res.json(result);
   })
 
 });
@@ -88,12 +86,10 @@ router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req,
                   "order by sum(value) DESC ";
 
   // Serialize the query result.
-  var summary = [];
   db.sequelize.query(statement).success(function(result) {
-    summary.push(result);
 
     // When the serialization is done, return the array as a JSON.
-    return res.json(summary);
+    return res.json(result);
   })
 
 });
@@ -107,12 +103,9 @@ router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format', func
     "from `alladopted` " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "`inc/dec` is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by unit_of_appropriation_name " + "order by sum(value) DESC ";
 
   // Serialize the query result.
-  var summary = [];
   db.sequelize.query(statement).success(function(result) {
-    summary.push(result);
-
     // When the serialization is done, return the array as a JSON.
-    return res.json(summary);
+    return res.json(result);
   })
 
 });
@@ -124,7 +117,6 @@ router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/rc/:rc/summary.:format
 
 //ocSummary
 router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/rc/:rc/bc/:bc/summary.:format', function(req,res) {});
-
 
 
 // REGISTER OUR ROUTES -------------------------------

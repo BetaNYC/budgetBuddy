@@ -7,12 +7,8 @@ task 'fetch_data', 'fetch data from repo', ->
 task 'unzip_data', 'unzip data', ->
   shell 'unzip data/processed/alladopted.csv.zip && mv alladopted* data/processed'
 
-task 'prepare_sqlite', 'prepare sqlite', ->
-  shell 'rm data/processed/alladopted.db*'
-  shell 'python data/bin/csv2sqlite3.py data/processed/alladopted.csv'
-
 task 'prepare_postgres', 'prepare postgres', ->
-  shell 'python data/bin/csv2postgres.py data/processed/alladopted.csv'
+  shell 'python data/bin/csv2postgres.sh $(pwd)/data/processed/alladopted.csv'
 
 task 'test', 'run tests', ->
   shell 'NODE_ENV=test ./node_modules/.bin/mocha'

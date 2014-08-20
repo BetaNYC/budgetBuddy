@@ -13,16 +13,15 @@
     , "moment": "*"
     , "request": "*"
     , "nib": "*"
-    , "sequelize": "*"
     , "nodemon": "*"
-    , "pg": "*"
+    , "pg": "~2.0.0"
   }
   , "devDependencies": {
     "mocha" : "*"
   }
   , "scripts": {
       "start": "NODE_ENV=development nodemon server.js -p 3000"
-    , "setup_dev": "cake fetch_data && cake prepare_sqlite"
+    , "setup_dev": "cake fetch_data && cake prepare_postgres"
     , "test": "cake test"
   }
   , "engines": {

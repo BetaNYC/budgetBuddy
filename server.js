@@ -5,13 +5,14 @@
 var express    = require('express');    // call express
 var app        = express();         // define our app using express
 var bodyParser = require('body-parser');
-var sqlite3    = require("sqlite3").verbose();
-var env        = require(__dirname + "/env.json");
+var yaml       = require('js-yaml');
 var fs         = require('fs');
+var env        = yaml.safeLoad(fs.readFileSync(__dirname + "/env.yml"));
 var http       = require('http');
 var swagger    = require('swagger-jack');
-var yaml       = require('js-yaml');
-var db         = require('./models')
+var pg         = require('pg');
+var connString = env[process.env.NODE_ENV]["database"];
+var db         = new pg.Client(connString);
 
 
 
@@ -22,9 +23,9 @@ var port = process.env.PORT || 3000;
 // =============================================================================
 
 // APPLICATION
-app.currentEnv  = process.env.NODE_ENV || 'development';
-app.basePath    = env[app.currentEnv]["base_path"];
-app.database    = env[app.currentEnv]["database"];
+process.env.NODE_ENV    = process.env.NODE_ENV || 'development';
+process.env.basePath    = env[process.env.NODE_ENV]["base_path"];
+process.env.database    = env[process.env.NODE_ENV]["database"];
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -33,7 +34,7 @@ app.use(express.static(__dirname + '/public'));
 
 // WIP
 // require(__dirname + "/app/helpers.js");
-// app.use(app.configureSwagger(app.currentEnv));
+// app.use(app.configureSwagger(process.env.NODE_ENV));
 
 
 // ROUTES FOR OUR API
@@ -48,25 +49,33 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
   var year = Number(req.params.year) - 2000;
 
   var statement = "select agency_id, agency_name, value " +
-                  "from alladopted " +
+                  "from budgetbuddy.alladopted " +
                   "where " +
                   "budget_period = 'ADOPTED BUDGET FY" + year + "' and " +
                   "inc_dec is null and " +
                   "key = 'AMOUNT' " +
-                  "group by agency_name " +
                   "order by value DESC ";
 
   // Serialize the query result.
-  // db.sequelize.query(statement).success(function(result) {
-  db.AllAdopted.findAll({where: {budget_period: "ADOPTED BUDGET FY" + year, inc_dec: null, key: "AMOUNT"}, attributes: ["agency_id", "agency_name", "value"], order: "value DESC"}).success(function(result) {
-    // Add the more field to each row
-    result.map(function(row) {
-      row.more = app.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + 'agency/' + row.agency_id + '/summary.json';
-    })
+  db.connect(function(err) {
+    if(err) {return console.error('could not connect to postgres', err);}
 
-    // When the serialization is done, return the array as a JSON.
-    return res.json(result);
-  })
+    db.query(statement,function (err,result) {
+      if(err) {return console.error('could not connect to postgres', err);}
+      var summary = {};
+      console.log(result);
+      summary.total = result.rowCount;
+      summary.results = result.rows;
+      summary.results.map(function(row) {
+        row.more = process.env.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + 'agency/' + row.agency_id + '/summary.json';
+      })
+
+      db.end();
+
+      // When the serialization is done, return the array as a JSON.
+      return res.json(summary);
+    })
+  });
 
 });
 
@@ -77,7 +86,7 @@ router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req,
   var year = Number(req.params.year) - 2000;
 
   var statement = "select  unit_of_appropriation_name, unit_of_appropriation_id, value " +
-                  "from alladopted " +
+                  "from budgetbuddy.alladopted " +
                   "where " +
                   "budget_period = 'ADOPTED BUDGET FY" + year + "' and " +
                   "inc_dec is null and " +
@@ -87,12 +96,17 @@ router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req,
                   "order by value DESC ";
 
   // Serialize the query result.
-  db.sequelize.query(statement).success(function(result) {
-  // db.AllAdopted.findAll({attributes: ["unit_of_appropriation_name", "unit_of_appropriation_id"]}).success(function(result) {
-    // When the serialization is done, return the array as a JSON.
-    return res.json(result);
-  })
+  db.connect(function(err) {
+    if(err) {return console.error('could not connect to postgres', err);}
 
+    db.query(statement,function (err,result) {
+
+      db.end();
+
+      // When the serialization is done, return the array as a JSON.
+      return res.json(result);
+    })
+  });
 });
 
 // uoaSummary
@@ -101,13 +115,20 @@ router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format', func
   var year = Number(req.params.year) - 2000;
 
   var statement = "select responsibility_center_name, responsibility_center_id, value " +
-    "from alladopted " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "inc_dec is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by unit_of_appropriation_name " + "order by value DESC ";
+    "from budgetbuddy.alladopted " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "inc_dec is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by unit_of_appropriation_name " + "order by value DESC ";
 
   // Serialize the query result.
-  db.sequelize.query(statement).success(function(result) {
-    // When the serialization is done, return the array as a JSON.
-    return res.json(result);
-  })
+  db.connect(function(err) {
+    if(err) {return console.error('could not connect to postgres', err);}
+
+    db.query(statement,function (err,result) {
+
+      db.end();
+
+      // When the serialization is done, return the array as a JSON.
+      return res.json(result);
+    })
+  });
 
 });
 
@@ -127,11 +148,5 @@ app.use('/v1', router);
 // START THE SERVER
 // =============================================================================
 
-db.sequelize.sync({ force: true }).complete(function(err) {
-  if (err) {
-    throw err[0]
-  } else {
-    app.listen(port);
-    console.log('Express server listening on port ' + port);
-  }
-});
+app.listen(port);
+console.log('Express server listening on port ' + port);

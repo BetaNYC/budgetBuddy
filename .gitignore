@@ -19,4 +19,5 @@ LOG
 pids
 logs
 results
+env.yml
 

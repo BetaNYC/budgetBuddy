@@ -16,7 +16,7 @@ class API < ::Grape::API
 
   cnf = YAML::load_file(File.join(File.dirname(File.expand_path(__FILE__)), 'config.yml'))[ENV['RACK_ENV']]
 
-  ActiveRecord::Base.establish_connection(cnf['database'])
+  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || cnf['database'])
 
 
   perPage = 30

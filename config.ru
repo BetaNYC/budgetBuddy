@@ -4,10 +4,27 @@ require "grape/kaminari"
 require "active_record"
 require "figaro"
 require "yaml"
-require "sinatra"
+require "sinatra/base"
+require 'grape-swagger'
+require 'rack/cors'
 
+use Rack::Cors do
+  allow do
+    origins '*'
+    resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
+  end
+end
 
-set :public_folder, Proc.new { File.join(root, "public") }
+class Frontend < Sinatra::Base
+  set :public_folder, Proc.new { File.join(root, "public") }
+  root = ::File.dirname(__FILE__)
+  set :root,  root
+
+  get "/" do
+    erb :home
+  end
+end
+
 
 class API < ::Grape::API
   version 'v1', using: :path
@@ -21,6 +38,7 @@ class API < ::Grape::API
 
   perPage = 30
 
+  desc "Budget summary", nickname: "budgetSummary"
   get '/year/:year/budget/op/summary.:format' do
     year = params[:year].to_i - 2000
     page = (params[:page] || 1).to_i
@@ -66,7 +84,8 @@ class API < ::Grape::API
       results: res
     }
   end
+
+  add_swagger_documentation base_path: "/api", mount_path: "doc", hide_documentation_path: true, api_version: "v1"
 end
 
-
-run API
+run Rack::URLMap.new("/" => Frontend.new,  "/api" => API.new)

@@ -16,3 +16,5 @@ task :start do
 end
 
 task :setup_dev => [:fetch_data, :unzip_data, :prepare_postgres]
+
+task :default => :start

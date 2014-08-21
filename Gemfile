@@ -8,6 +8,7 @@ gem "pg"
 gem "activerecord"
 gem 'grape-kaminari'
 gem 'figaro'
+gem 'sinatra'
 
 
 group :production do

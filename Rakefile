@@ -11,4 +11,8 @@ task :prepare_postgres  do
   `data/bin/csv2postgres.sh $(pwd)/data/processed/alladopted.csv`
 end
 
+task :start do
+  system "shotgun config.ru -p 3000 --server=thin"
+end
+
 task :setup_dev => [:fetch_data, :unzip_data, :prepare_postgres]

@@ -7,8 +7,7 @@ require "yaml"
 
 
 
-
-
+  
 class API < ::Grape::API
   version 'v1', using: :path
   format :json

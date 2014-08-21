@@ -10,10 +10,9 @@ var fs         = require('fs');
 var env        = yaml.safeLoad(fs.readFileSync(__dirname + "/env.yml"));
 var http       = require('http');
 var swagger    = require('swagger-jack');
-var pg         = require('pg');
 var connString = env[process.env.NODE_ENV]["database"];
-var db         = new pg.Client(connString);
-
+var epg        = require("easy-pg");
+var db         = epg(connString);
 
 
 var port = process.env.PORT || 3000;
@@ -47,6 +46,8 @@ var router = express.Router();        // get an instance of the express Router
 router.get('/year/:year/budget/op/summary.:format', function(req, res) {
 
   var year = Number(req.params.year) - 2000;
+  var page = req.params.page || 1;
+  var perPage = page * 100;
 
   var statement = "select agency_id, agency_name, value " +
                   "from budgetbuddy.alladopted " +
@@ -54,28 +55,35 @@ router.get('/year/:year/budget/op/summary.:format', function(req, res) {
                   "budget_period = 'ADOPTED BUDGET FY" + year + "' and " +
                   "inc_dec is null and " +
                   "key = 'AMOUNT' " +
-                  "order by value DESC ";
+                  "group by agency_id, agency_name, value " +
+                  "order by value DESC";
+  var totalCount = 0;
+  db.query("select count(agency_id) where("+statement+");", function (err,res) {
+    console.log(res);
+  })
 
   // Serialize the query result.
-  db.connect(function(err) {
+
+  db.query(statement + " limit " + perPage,function (err,result) {
     if(err) {return console.error('could not connect to postgres', err);}
 
-    db.query(statement,function (err,result) {
-      if(err) {return console.error('could not connect to postgres', err);}
-      var summary = {};
-      console.log(result);
-      summary.total = result.rowCount;
-      summary.results = result.rows;
-      summary.results.map(function(row) {
-        row.more = process.env.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + 'agency/' + row.agency_id + '/summary.json';
-      })
 
-      db.end();
+    var output = {};
+    output.total = totalCount;
+    output.pageCount = result.rowCount;
+    output.totalPages = Math.floor(result.rowCount / perPage);
+    output.results = result.rows;
 
-      // When the serialization is done, return the array as a JSON.
-      return res.json(summary);
+    output.results.map(function(row) {
+      row.more = process.env.basePath + '/v1/year/'+ req.params.year +'/budget/op/' + 'agency/' + row.agency_id + '/summary.json';
     })
-  });
+
+    db.end();
+
+    // When the serialization is done, return the array as a JSON.
+    return res.json(output);
+  })
+
 
 });
 
@@ -100,11 +108,16 @@ router.get('/year/:year/budget/op/agency/:agency/summary.:format', function(req,
     if(err) {return console.error('could not connect to postgres', err);}
 
     db.query(statement,function (err,result) {
+      if(err) {return console.error('could not connect to postgres', err);}
+
+      var summary = {};
+      summary.total = result.rowCount;
+      summary.results = result.rows;
 
       db.end();
 
       // When the serialization is done, return the array as a JSON.
-      return res.json(result);
+      return res.json(summary);
     })
   });
 });
@@ -115,18 +128,24 @@ router.get('/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format', func
   var year = Number(req.params.year) - 2000;
 
   var statement = "select responsibility_center_name, responsibility_center_id, value " +
-    "from budgetbuddy.alladopted " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "inc_dec is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' " + "group by unit_of_appropriation_name " + "order by value DESC ";
+    "from budgetbuddy.alladopted " + "where " + "budget_period = 'ADOPTED BUDGET FY" + year + "' and " + "inc_dec is null and " + "agency_id = " + req.params.agency + " and " + "unit_of_appropriation_id = " + req.params.unitOfAppropriation + " and " + "key = 'AMOUNT' "
+    + "group by responsibility_center_name " + "order by value DESC ";
 
   // Serialize the query result.
   db.connect(function(err) {
     if(err) {return console.error('could not connect to postgres', err);}
 
     db.query(statement,function (err,result) {
+      if(err) {return console.error('could not connect to postgres', err);}
+
+      var summary = {};
+      summary.total = result.rowCount;
+      summary.results = result.rows;
 
       db.end();
 
       // When the serialization is done, return the array as a JSON.
-      return res.json(result);
+      return res.json(summary);
     })
   });
 

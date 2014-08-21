@@ -6,15 +6,13 @@
       "express": "~4.0.0"
     , "body-parser": "~1.0.1"
     , "ejs": "*"
-    , "underscore": "*"
-    , "underscore.string": "*"
     , "swagger-jack": "1.6.0"
     , "js-yaml": "*"
     , "moment": "*"
     , "request": "*"
     , "nib": "*"
     , "nodemon": "*"
-    , "pg": "~2.0.0"
+    , "easy-pg": "*"
   }
   , "devDependencies": {
     "mocha" : "*"

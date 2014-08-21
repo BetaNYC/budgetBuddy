@@ -39,14 +39,17 @@ class API < ::Grape::API
   perPage = 30
 
   desc "Budget summary", nickname: "budgetSummary"
-  get '/year/:year/budget/op/summary.:format' do
+  params do
+    requires :year, type: Integer, desc: "Budget year (only 2014 available for now)."
+  end
+  get '/year/:year/budget/op' do
     year = params[:year].to_i - 2000
     page = (params[:page] || 1).to_i
     statement = "select agency_id, agency_name, value  from budgetbuddy.alladopted  where  budget_period = 'ADOPTED BUDGET FY" + year.to_s + "' and  inc_dec is null and  key = 'AMOUNT'  group by agency_id, agency_name, value order by value DESC";
 
     results = ActiveRecord::Base.connection.execute(statement)
     res = Kaminari.paginate_array(results.to_a).page(page).per(perPage)
-    res.map{|item| item['more'] = "#{cnf['host']}/v1/year/#{params[:year]}/budget/op/agency/#{item['agency_id']}/summary.json"}
+    res.map{|item| item['more'] = "#{cnf['host']}/api/v1/year/#{params[:year]}/budget/op/agency/#{item['agency_id']}.json"}
     {
       totalCount: results.count,
       page: page,
@@ -55,7 +58,12 @@ class API < ::Grape::API
     }
   end
 
-  get '/year/:year/budget/op/agency/:agency/summary.:format' do
+  desc "Agency summary", nickname: "agencySummary"
+  params do
+    requires :year, type: Integer, desc: "Budget year (only 2014 available for now)."
+    requires :agency, type: String, desc: "Agency number"
+  end
+  get '/year/:year/budget/op/agency/:agency' do
     year = params[:year].to_i - 2000
     page = (params[:page] || 1).to_i
     statement = "select unit_of_appropriation_name, unit_of_appropriation_id, value from budgetbuddy.alladopted where budget_period = 'ADOPTED BUDGET FY#{year}' and inc_dec is null and agency_id = #{params[:agency]} and key = 'AMOUNT' order by value DESC "
@@ -70,7 +78,13 @@ class API < ::Grape::API
     }
   end
 
-  get '/year/:year/budget/op/agency/:agency/uoa/:uoa/summary.:format' do
+  desc "Unit of appropriation summary", nickname: "agencySummary"
+  params do
+    requires :year, type: Integer, desc: "Budget year (only 2014 available for now)."
+    requires :agency, type: String, desc: "Agency number"
+    requires :uoa, type: String, desc: "Unit of appropriation number"
+  end
+  get '/year/:year/budget/op/agency/:agency/uoa/:uoa' do
     year = params[:year].to_i - 2000
     page = (params[:page] || 1).to_i
     statement = "select responsibility_center_name, responsibility_center_id, value  from budgetbuddy.alladopted  where  budget_period = 'ADOPTED BUDGET FY#{year}' and  inc_dec is null and  agency_id = #{params[:agency]} and  unit_of_appropriation_id = #{params[:unitOfAppropriation]} and  key = 'AMOUNT' order by value DESC "

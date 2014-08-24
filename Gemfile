@@ -1,20 +1,24 @@
-source "http://rubygems.org"
+source 'https://rubygems.org'
 ruby '2.1.1'
 
-gem "rake"
-gem "grape"
-gem "grape-swagger"
-gem "shotgun"
-gem "thin"
-gem "pg"
-gem "activerecord"
-gem 'grape-kaminari'
-gem 'sinatra'
+gem 'rails', '4.1.5'
+gem 'rails-api'
+gem 'spring', :group => :development
+gem 'pg'
 gem 'rack-cors'
-gem "garner"
-gem "pry"
-gem "rack-timeout"
+gem 'rack-timeout'
+gem 'active_model_serializers'
+gem 'figaro'
   
+group :development do
+  gem 'better_errors', '>= 1.1.0'
+  gem 'binding_of_caller', '>= 0.7.2' #, :platforms => [:mri_19, :rbx]
+end
+
+group :development, :test do
+  gem "pry-rails"
+end
+
 group :production do
   gem "rails_12factor"
 end

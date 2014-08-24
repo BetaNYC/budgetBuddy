@@ -1,7 +1,7 @@
 Some API Questions:
 Our Hierarchy looks like: year/operatingBudget/agency/uoa/responsibilityCenter/budgetCode/objectclass/object
 
-Should we include all subordinate data when a given level is queried? 
+Should we include all subordinate data when a given level is queried?
 Should we have a flag for whether the results are roll-up for that level, or include subordinate data?
 
 

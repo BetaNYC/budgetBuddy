@@ -1,7 +1,0 @@
-development:
-  host: "http://localhost:3000"
-  database: "postgres://postgres:@localhost/postgres"
-production:
-  host: "http://budgetbuddy.herokuapp.com"
-
-

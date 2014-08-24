@@ -1,20 +1,6 @@
+# Add your own tasks in files placed in lib/tasks ending in .rake,
+# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
-task :fetch_data  do
-  `rm -rf data && git clone git@github.com:BetaNYC/budgetBuddyData.git data`
-end
+require File.expand_path('../config/application', __FILE__)
 
-task :unzip_data  do
-  `unzip data/processed/alladopted.csv.zip && mv alladopted* data/processed`
-end
-
-task :prepare_postgres  do
-  `data/bin/csv2postgres.sh $(pwd)/data/processed/alladopted.csv`
-end
-
-task :start do
-  system "shotgun config.ru -p 3000 --server=webrick"
-end
-
-task :setup_dev => [:fetch_data, :unzip_data, :prepare_postgres]
-
-task :default => :start
+Rails.application.load_tasks

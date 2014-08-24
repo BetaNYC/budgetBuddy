@@ -9,7 +9,8 @@ gem 'rack-cors'
 gem 'rack-timeout'
 gem 'active_model_serializers'
 gem 'figaro'
-  
+gem 'swagger-docs'
+
 group :development do
   gem 'better_errors', '>= 1.1.0'
   gem 'binding_of_caller', '>= 0.7.2' #, :platforms => [:mri_19, :rbx]

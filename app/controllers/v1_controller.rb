@@ -1,4 +1,42 @@
 class V1Controller < ApplicationController
+  include Swagger::Docs::ImpotentMethods
+  include Pager
+
+  swagger_controller :V1, "Budget year"
+
+  swagger_api :budget do
+    summary "All budget items in a year"
+    notes "only 2014 available for now"
+    param :query, :page, :integer, :optional, "Page number"
+    param :path, :year, :integer, :optional, "Budget year"
+  end
+
+
+  # Support for Swagger complex types:
+  # https://github.com/wordnik/swagger-core/wiki/Datatypes#wiki-complex-types
+  swagger_model :Adopted do
+    description "Adopted Budget Item object."
+    property :agency_id, :integer
+    property :agency_name, :text
+    property :unit_of_appropriation_id, :integer
+    property :unit_of_appropriation_name, :text
+    property :responsibility_center_id, :text
+    property :responsibility_center_name, :text
+    property :budget_code_id, :text
+    property :budget_code_name, :text
+    property :object_class, :text
+    property :ic_ref, :text
+    property :obj, :text
+    property :description, :text
+    property :budget_period, :text
+    property :inc_dec, :text
+    property :key, :text
+    property :value, :text
+    property :file_name, :text
+    property :source_line, :text
+    property :id, :integer
+  end
+
 
   def budget
 
@@ -62,23 +100,6 @@ class V1Controller < ApplicationController
 
   private
 
-  def year
-    params[:year].to_i - 2000
-  end
-
-  def limit
-    if params[:all] == "true"
-      "ALL"
-    else
-      30
-    end
-  end
-
-  def offset
-    return 0 if limit.respond_to?(:*)
-
-    (params[:page] || 1).to_i * limit
-  end
 
   def default_serializer_options
     {

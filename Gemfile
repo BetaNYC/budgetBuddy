@@ -8,10 +8,11 @@ gem "thin"
 gem "pg"
 gem "activerecord"
 gem 'grape-kaminari'
-gem 'figaro'
 gem 'sinatra'
 gem 'rack-cors'
-
+gem "garner"
+gem "pry"
+gem "rack-timeout"
 
 group :production do
   gem "rails_12factor"

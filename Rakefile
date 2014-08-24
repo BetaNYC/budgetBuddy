@@ -12,7 +12,7 @@ task :prepare_postgres  do
 end
 
 task :start do
-  system "shotgun config.ru -p 3000 --server=thin"
+  system "shotgun config.ru -p 3000 --server=webrick"
 end
 
 task :setup_dev => [:fetch_data, :unzip_data, :prepare_postgres]

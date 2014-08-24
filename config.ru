@@ -2,11 +2,14 @@ require "grape"
 require "pg"
 require "grape/kaminari"
 require "active_record"
-require "figaro"
 require "yaml"
 require "sinatra/base"
 require 'grape-swagger'
 require 'rack/cors'
+require "rack-timeout"
+
+use Rack::Timeout
+Rack::Timeout.timeout = 15
 
 use Rack::Cors do
   allow do
@@ -33,7 +36,7 @@ class API < ::Grape::API
 
   cnf = YAML::load_file(File.join(File.dirname(File.expand_path(__FILE__)), 'config.yml'))[ENV['RACK_ENV']]
 
-  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || cnf['database'])
+  ::ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || cnf['database'])
 
 
   perPage = 30
@@ -46,6 +49,7 @@ class API < ::Grape::API
     year = params[:year].to_i - 2000
     page = (params[:page] || 1).to_i
     statement = "select agency_id, agency_name, value  from budgetbuddy.alladopted  where  budget_period = 'ADOPTED BUDGET FY" + year.to_s + "' and  inc_dec is null and  key = 'AMOUNT'  group by agency_id, agency_name, value order by value DESC";
+
 
     results = ActiveRecord::Base.connection.execute(statement)
     res = Kaminari.paginate_array(results.to_a).page(page).per(perPage)

@@ -12,18 +12,18 @@
           "notes": "only 2014 available for now",
           "parameters": [
             {
-              "paramType": "query",
-              "name": "page",
-              "type": "integer",
-              "description": "Page number",
-              "required": false
-            },
-            {
               "paramType": "path",
               "name": "year",
               "type": "integer",
               "description": "Budget year",
               "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "page",
+              "type": "integer",
+              "description": "Page number",
+              "required": false
             }
           ],
           "method": "get",
@@ -39,13 +39,6 @@
           "notes": "only 2014 available for now",
           "parameters": [
             {
-              "paramType": "query",
-              "name": "page",
-              "type": "integer",
-              "description": "Page number",
-              "required": false
-            },
-            {
               "paramType": "path",
               "name": "year",
               "type": "integer",
@@ -58,6 +51,13 @@
               "type": "string",
               "description": "Agency number",
               "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "page",
+              "type": "integer",
+              "description": "Page number",
+              "required": false
             }
           ],
           "method": "get",
@@ -69,16 +69,9 @@
       "path": "api/v1/year/{year}/budget/op/agency/{agency}/uoa/{uoa}.json",
       "operations": [
         {
-          "summary": "All budget items in a year",
+          "summary": "Unit of appropriation summary",
           "notes": "only 2014 available for now",
           "parameters": [
-            {
-              "paramType": "query",
-              "name": "page",
-              "type": "integer",
-              "description": "Page number",
-              "required": false
-            },
             {
               "paramType": "path",
               "name": "year",
@@ -99,6 +92,13 @@
               "type": "string",
               "description": "Unit of appropriation number",
               "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "page",
+              "type": "integer",
+              "description": "Page number",
+              "required": false
             }
           ],
           "method": "get",

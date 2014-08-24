@@ -7,8 +7,8 @@ class V1Controller < ApplicationController
   swagger_api :budget do
     summary "All budget items in a year"
     notes "only 2014 available for now"
-    param :query, :page, :integer, :optional, "Page number"
     param :path, :year, :integer, :required, "Budget year"
+    param :query, :page, :integer, :optional, "Page number"
   end
   def budget
     statement = %Q{
@@ -31,9 +31,9 @@ class V1Controller < ApplicationController
   swagger_api :agency do
     summary "Agency summary"
     notes "only 2014 available for now"
-    param :query, :page, :integer, :optional, "Page number"
     param :path, :year, :integer, :required, "Budget year"
     param :path, :agency, :string, :required, "Agency number"
+    param :query, :page, :integer, :optional, "Page number"
   end
   def agency
     statement = %Q{
@@ -55,12 +55,12 @@ class V1Controller < ApplicationController
   end
 
   swagger_api :unit_of_appropriation do
-    summary "All budget items in a year"
+    summary "Unit of appropriation summary"
     notes "only 2014 available for now"
-    param :query, :page, :integer, :optional, "Page number"
     param :path, :year, :integer, :required, "Budget year"
     param :path, :agency, :string, :required, "Agency number"
     param :path, :uoa, :string, :required, "Unit of appropriation number"
+    param :query, :page, :integer, :optional, "Page number"
   end
   def unit_of_appropriation
     statement = %Q{
@@ -93,7 +93,7 @@ class V1Controller < ApplicationController
       # results: object
     }
   end
-  
+
 
   # Support for Swagger complex types:
   # https://github.com/wordnik/swagger-core/wiki/Datatypes#wiki-complex-types

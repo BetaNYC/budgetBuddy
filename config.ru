@@ -43,6 +43,7 @@ class API < ::Grape::API
 
   desc "Budget summary", nickname: "budgetSummary"
   params do
+    optional :page, type: Integer, desc: "Page number"
     requires :year, type: Integer, desc: "Budget year (only 2014 available for now)."
   end
   get '/year/:year/budget/op' do
@@ -64,6 +65,7 @@ class API < ::Grape::API
 
   desc "Agency summary", nickname: "agencySummary"
   params do
+    optional :page, type: Integer, desc: "Page number"
     requires :year, type: Integer, desc: "Budget year (only 2014 available for now)."
     requires :agency, type: String, desc: "Agency number"
   end
@@ -84,6 +86,7 @@ class API < ::Grape::API
 
   desc "Unit of appropriation summary", nickname: "agencySummary"
   params do
+    optional :page, type: Integer, desc: "Page number"
     requires :year, type: Integer, desc: "Budget year (only 2014 available for now)."
     requires :agency, type: String, desc: "Agency number"
     requires :uoa, type: String, desc: "Unit of appropriation number"

@@ -1,6 +1,6 @@
 class V1Controller < ApplicationController
-  include Swagger::Docs::ImpotentMethods
   include Pager
+  include Swagger::Docs::ImpotentMethods
 
   swagger_controller :V1, "Budget year"
 
@@ -8,38 +8,9 @@ class V1Controller < ApplicationController
     summary "All budget items in a year"
     notes "only 2014 available for now"
     param :query, :page, :integer, :optional, "Page number"
-    param :path, :year, :integer, :optional, "Budget year"
+    param :path, :year, :integer, :required, "Budget year"
   end
-
-
-  # Support for Swagger complex types:
-  # https://github.com/wordnik/swagger-core/wiki/Datatypes#wiki-complex-types
-  swagger_model :Adopted do
-    description "Adopted Budget Item object."
-    property :agency_id, :integer
-    property :agency_name, :text
-    property :unit_of_appropriation_id, :integer
-    property :unit_of_appropriation_name, :text
-    property :responsibility_center_id, :text
-    property :responsibility_center_name, :text
-    property :budget_code_id, :text
-    property :budget_code_name, :text
-    property :object_class, :text
-    property :ic_ref, :text
-    property :obj, :text
-    property :description, :text
-    property :budget_period, :text
-    property :inc_dec, :text
-    property :key, :text
-    property :value, :text
-    property :file_name, :text
-    property :source_line, :text
-    property :id, :integer
-  end
-
-
   def budget
-
     statement = %Q{
       SELECT agency_id, agency_name, budget_period
       FROM  budgetbuddy.alladopted
@@ -57,6 +28,13 @@ class V1Controller < ApplicationController
     end
   end
 
+  swagger_api :agency do
+    summary "Agency summary"
+    notes "only 2014 available for now"
+    param :query, :page, :integer, :optional, "Page number"
+    param :path, :year, :integer, :required, "Budget year"
+    param :path, :agency, :string, :required, "Agency number"
+  end
   def agency
     statement = %Q{
       SELECT agency_id, agency_name, budget_period, unit_of_appropriation_name, unit_of_appropriation_id, value
@@ -76,8 +54,15 @@ class V1Controller < ApplicationController
     end
   end
 
+  swagger_api :unit_of_appropriation do
+    summary "All budget items in a year"
+    notes "only 2014 available for now"
+    param :query, :page, :integer, :optional, "Page number"
+    param :path, :year, :integer, :required, "Budget year"
+    param :path, :agency, :string, :required, "Agency number"
+    param :path, :uoa, :string, :required, "Unit of appropriation number"
+  end
   def unit_of_appropriation
-
     statement = %Q{
       SELECT agency_id, agency_name, budget_period, unit_of_appropriation_name, unit_of_appropriation_id, responsibility_center_name, responsibility_center_id, value
       FROM budgetbuddy.alladopted
@@ -95,11 +80,10 @@ class V1Controller < ApplicationController
       results = Adopted.find_by_sql(statement)
       render json: ActiveModel::ArraySerializer.new(results, each_serializer: UOASerializer)
     end
-
   end
 
-  private
 
+  private
 
   def default_serializer_options
     {
@@ -109,5 +93,32 @@ class V1Controller < ApplicationController
       # results: object
     }
   end
+  
+
+  # Support for Swagger complex types:
+  # https://github.com/wordnik/swagger-core/wiki/Datatypes#wiki-complex-types
+  swagger_model :Adopted do
+    description "Adopted Budget Item object."
+    property :agency_id, :integer, :required, "Describe attribute"
+    property :agency_name, :text, :required, "Describe attribute"
+    property :unit_of_appropriation_id, :integer, :required, "Describe attribute"
+    property :unit_of_appropriation_name, :text, :required, "Describe attribute"
+    property :responsibility_center_id, :text, :required, "Describe attribute"
+    property :responsibility_center_name, :text, :required, "Describe attribute"
+    property :budget_code_id, :text, :required, "Describe attribute"
+    property :budget_code_name, :text, :required, "Describe attribute"
+    property :object_class, :text, :required, "Describe attribute"
+    property :ic_ref, :text, :required, "Describe attribute"
+    property :obj, :text, :required, "Describe attribute"
+    property :description, :text, :required, "Describe attribute"
+    property :budget_period, :text, :required, "Describe attribute"
+    property :inc_dec, :text, :required, "Describe attribute"
+    property :key, :text, :required, "Describe attribute"
+    property :value, :text, :required, "Describe attribute"
+    property :file_name, :text, :required, "Describe attribute"
+    property :source_line, :text, :required, "Describe attribute"
+    property :id, :integer, :required, "Describe attribute"
+  end
+
 
 end

@@ -1,5 +1,5 @@
 class BudgetSerializer < ActiveModel::Serializer
-  attributes :agency_id, :agency_name, :agency_detail
+  attributes :agency_id, :agency_name, :agency_detail, :value
   include Rails.application.routes.url_helpers
 
   def agency_detail

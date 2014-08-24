@@ -13,7 +13,7 @@ class V1Controller < ApplicationController
   end
   def budget
     statement = %Q{
-      SELECT agency_id, agency_name, budget_period
+      SELECT agency_id, agency_name, budget_period, value
       FROM  budgetbuddy.alladopted
       WHERE budget_period = 'ADOPTED BUDGET FY#{year}'
         AND inc_dec is null

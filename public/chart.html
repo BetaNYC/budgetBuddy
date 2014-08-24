@@ -20,12 +20,12 @@
     <script src="js/nv.d3.js"></script>
     <script>
 
-      d3.json('/api/v1/year/2014/budget/op.json',function (data) {
+      d3.json('/api/v1/year/2014/budget/op.json?all=true',function (data) {
         console.log(data);
 
         data = [{
           key:"noKey",
-          values:data.results
+          values:data
         }]
 
         console.log(data);
@@ -42,7 +42,7 @@
               //.showValues(true)
 
             d3.select('#chart svg')
-              .datum(data.results)
+              .datum(data)
               .transition().duration(500)
               .call(chart)
               ;

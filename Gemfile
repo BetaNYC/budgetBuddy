@@ -14,7 +14,7 @@ gem 'rack-cors'
 gem "garner"
 gem "pry"
 gem "rack-timeout"
-
+  
 group :production do
   gem "rails_12factor"
 end

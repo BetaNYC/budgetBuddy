@@ -51,7 +51,7 @@ class API < ::Grape::API
     page = (params[:page] || 1).to_i
     statement = "select agency_id, agency_name, value  from budgetbuddy.alladopted  where  budget_period = 'ADOPTED BUDGET FY" + year.to_s + "' and  inc_dec is null and  key = 'AMOUNT'  group by agency_id, agency_name, value order by value DESC";
 
-
+    
     results = ActiveRecord::Base.connection.execute(statement)
     res = Kaminari.paginate_array(results.to_a).page(page).per(perPage)
     res.map{|item| item['more'] = "#{cnf['host']}/api/v1/year/#{params[:year]}/budget/op/agency/#{item['agency_id']}.json"}

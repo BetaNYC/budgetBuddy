@@ -96,6 +96,7 @@ GEM
       rails_stdout_logging
     rails_serve_static_assets (0.0.2)
     rails_stdout_logging (0.0.3)
+    rake (10.3.2)
     shotgun (0.9)
       rack (>= 1.0)
     sinatra (1.4.5)
@@ -131,6 +132,7 @@ DEPENDENCIES
   rack-cors
   rack-timeout
   rails_12factor
+  rake
   shotgun
   sinatra
   thin

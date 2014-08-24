@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 ruby '2.1.1'
 
+gem "rake"
 gem "grape"
 gem "grape-swagger"
 gem "shotgun"

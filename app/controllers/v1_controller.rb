@@ -2,6 +2,8 @@ class V1Controller < ApplicationController
   include Pager
   include Swagger::Docs::ImpotentMethods
 
+  before_filter :set_expiration_date
+
   swagger_controller :V1, "Budget year"
 
   swagger_api :budget do
@@ -123,5 +125,8 @@ class V1Controller < ApplicationController
     property :id, :integer, :required, "Describe attribute"
   end
 
+  def set_expiration_date
+    expires_in 365*24*60*60, public: true
+  end
 
 end

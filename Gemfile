@@ -3,7 +3,6 @@ ruby '2.1.1'
 
 gem 'rails', '4.1.5'
 gem 'rails-api'
-gem 'spring', :group => :development
 gem 'pg'
 gem 'rack-cors'
 gem 'rack-timeout'
@@ -12,6 +11,7 @@ gem 'figaro'
 gem 'swagger-docs'
 
 group :development do
+  gem 'spring'
   gem 'better_errors', '>= 1.1.0'
   gem 'binding_of_caller', '>= 0.7.2' #, :platforms => [:mri_19, :rbx]
 end

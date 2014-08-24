@@ -1,0 +1,6 @@
+
+
+install postgresql
+
+
+

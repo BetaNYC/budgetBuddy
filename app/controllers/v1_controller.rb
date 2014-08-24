@@ -9,6 +9,7 @@ class V1Controller < ApplicationController
     notes "only 2014 available for now"
     param :path, :year, :integer, :required, "Budget year"
     param :query, :page, :integer, :optional, "Page number"
+    param :query, :all, :boolean, :optional, "Disable pagination. Return all results."
   end
   def budget
     statement = %Q{
@@ -34,6 +35,7 @@ class V1Controller < ApplicationController
     param :path, :year, :integer, :required, "Budget year"
     param :path, :agency, :string, :required, "Agency number"
     param :query, :page, :integer, :optional, "Page number"
+    param :query, :all, :boolean, :optional, "Disable pagination. Return all results."
   end
   def agency
     statement = %Q{
@@ -61,6 +63,7 @@ class V1Controller < ApplicationController
     param :path, :agency, :string, :required, "Agency number"
     param :path, :uoa, :string, :required, "Unit of appropriation number"
     param :query, :page, :integer, :optional, "Page number"
+    param :query, :all, :boolean, :optional, "Disable pagination. Return all results."
   end
   def unit_of_appropriation
     statement = %Q{

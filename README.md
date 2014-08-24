@@ -19,15 +19,14 @@ querying different facets of the NYC budget.
 ### Demo Server
 
 You can use the bundled sample server to preview the data in the browser, if
-you wish.  Make sure to grab the submodules first, then you'll be able to
+you wish. Make sure to grab the submodules first, then you'll be able to
 convert the text file to SQL for the server.
 
 ```
 $ bundle install
 $ rake setup_dev
-$ rake
+$ rails s
 ```
 
-Now you can navigate to [http://localhost:3000/api/v1/2012/op/summary.json]() and
-take a look at a year's worth of data.  You can change the year to look at
+Now you can navigate to [http://localhost:3000/api/v1/2014/budget/op.json?all=true]() and take a look at a year's worth of data.  You can change the year to look at
 other times in the set.

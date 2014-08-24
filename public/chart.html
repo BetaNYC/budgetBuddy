@@ -3,8 +3,6 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>title</title>
-    <link rel="stylesheet" href="style.css">
   </head>
   <style>
     #chart svg {
@@ -13,60 +11,50 @@
     }
   </style>
   <body>
-
-
-
     <div id="chart">
       <svg></svg>
     </div>
 
     <!-- page content -->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/nv.d3.js"></script>
+    <script>
+
+      d3.json('/api/v1/year/2014/budget/op.json',function (data) {
+        console.log(data);
+
+        data = [{
+          key:"noKey",
+          values:data.results
+        }]
+
+        console.log(data);
+
+        nv.addGraph(function() {
+            var chart = nv.models.discreteBarChart()
+              .x(function(d) { return d.agency_name })
+              .y(function(d) { return d["value"] })
+              .staggerLabels(true)
+              .tooltips(false);
+
+
+              chart.xAxis.rotateLabels(90);
+              //.showValues(true)
+
+            d3.select('#chart svg')
+              .datum(data.results)
+              .transition().duration(500)
+              .call(chart)
+              ;
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
+          });
+      });
+
+    </script>
   </body>
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="js/nv.d3.js"></script>
-  <script>
-
-  
-
-d3.json('/v1/2014/op/summary.json',function (data) {
-  console.log(data);
-
-  data = [{
-    key:"noKey",
-    values:data
-  }]
-
-  console.log(data);
-
-  nv.addGraph(function() {
-      var chart = nv.models.discreteBarChart()
-        .x(function(d) { return d.agency_name })
-        .y(function(d) { return d["sum(value)"] })
-        .staggerLabels(true)
-        .tooltips(false);
-
-
-        chart.xAxis.rotateLabels(90);
-        //.showValues(true)
-
-      d3.select('#chart svg')
-        .datum(data)
-        .transition().duration(500)
-        .call(chart)
-        ;
-
-      nv.utils.windowResize(chart.update);
-
-      return chart;
-    });
-});
-
-    
-
-
-
-
-  </script>
 </html>
 
 

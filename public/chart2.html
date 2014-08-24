@@ -12,7 +12,7 @@ var width = 960,
 var color = d3.scale.category10();
 var radiusScale = d3.scale.pow().exponent(0.5).domain([0, 44070000000]).range([3, 100])
 
-var apiCall = '/v1/2014/op/summary.json';
+var apiCall = '/api/v1/year/2014/budget/op.json';
 
 drawBubbles(apiCall);
 
@@ -25,73 +25,59 @@ var svg = d3.select("body").append("svg")
 function drawBubbles(apiCall) {
   d3.json(apiCall,function (data) {
 
-console.log(data);
-data.forEach(function(d){
-  d.radius=radiusScale(d["sum(value)"]);
+    data.results.forEach(function(d){
+      d.radius=radiusScale(d["value"]);
+    });
 
-})
+    var force = d3.layout.force()
+        .gravity(0.04)
+        //.charge(function(d, i) { return i ? 0 : -2000; })
+        .charge(function(d){
+          if (d.highlighted) { return (-Math.pow(d.radius, 2.0) / 20) - 300 }
+            else {
+          return -Math.pow(d.radius, 2.0) / 20;
+        }
+        })
+        .nodes(data.results)
+        .size([width, height]);
 
-var force = d3.layout.force()
-    .gravity(0.04)
-    //.charge(function(d, i) { return i ? 0 : -2000; })
-    .charge(function(d){
-      if (d.highlighted) { return (-Math.pow(d.radius, 2.0) / 20) - 300 }
-        else {
-      return -Math.pow(d.radius, 2.0) / 20;
-    }
-    })
-    .nodes(data)
-    .size([width, height]);
+    force.start();
 
-force.start();
+    svg.selectAll("circle")
+        .data(data.results)
+      .enter().append("circle")
+        .attr("r", function(d) { return d.radius; })
+        .style("fill", function(d, i) { return color(i % 3); })
+        .on("mouseover",function(d){
+          d.highlighted = true;
+          force.start();
 
+          if(d.agency_name) {
+             $('#label').html(d.agency_name + "<br/>" + d['value']);
+          }
 
+          if(d.unit_of_appropriation_name) {
+            $('#label').html(d.unit_of_appropriation_name + "<br/>" + d['value']);
+          }
+        })
+        .on("mouseout",function(d){
+          d.highlighted = false;
+          force.start();
+        })
+        .on('click',function(d){
 
+            $("#bubbles").empty();
 
-svg.selectAll("circle")
-    .data(data)
-  .enter().append("circle")
-    .attr("r", function(d) { return d.radius; })
-    .style("fill", function(d, i) { return color(i % 3); })
-    .on("mouseover",function(d){
-      d.highlighted = true;
-      force.start();
-      console.log(d);
+            var newCall = '/api/v1/year/2014/budget/op/' + d.agency_id + '.json';
+            drawBubbles(newCall);
+        })
+        .call(force.drag);
 
-      if(d.agency_name) {
-         $('#label').html(d.agency_name + "<br/>" + d['sum(value)']);
-      }
-
-      if(d.unit_of_appropriation_name) {
-        $('#label').html(d.unit_of_appropriation_name + "<br/>" + d['sum(value)']);
-      }
-
-
-     
-    })
-    .on("mouseout",function(d){
-      d.highlighted = false;
-      force.start();
-    })
-    .on('click',function(d){
-
-        $("#bubbles").empty();
-
-        var newCall = '/v1/2014/op/' + d.agency_id + '/summary.json';
-        drawBubbles(newCall);
-    })
-    .call(force.drag);
-
-force.on("tick", function(e) {
-
-
-  svg.selectAll("circle")
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
-});
-
-
-
+    force.on("tick", function(e) {
+      svg.selectAll("circle")
+          .attr("cx", function(d) { return d.x; })
+          .attr("cy", function(d) { return d.y; });
+    });
 
 
 });

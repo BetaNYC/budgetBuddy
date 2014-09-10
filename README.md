@@ -7,19 +7,15 @@ The immediate goal of this project is to scrape current and historical budget
 docs, move the data into a database, and build an intuitive REST api for
 querying different facets of the NYC budget.
 
-### Get started
-
-This project requires you to install Ruby and Postgres. On a Mac, you can run
-
 #### Requirements
 
-First, install RVM:
+Install RVM:
 
 ```bash
 $ curl -sSL https://get.rvm.io | bash -s stable --ruby
 ```
 
-Next, install Ruby 2.1.1.
+Install Ruby 2.1.1.
 
 ```bash
 $ rvm install 2.1.1

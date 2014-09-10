@@ -27,7 +27,7 @@ module BudgetBuddy
       g.javascripts false
     end
     config.autoload_paths += %W(#{config.root}/lib)
-    
+
     config.assets.append_path 'vendor/assets/components'
 
     # This needs to be set here because the named urls don't work from serializers if we set the host from the application controller
@@ -42,7 +42,20 @@ module BudgetBuddy
     config.middleware.use Rack::Cors do
       allow do
         origins '*'
-        resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
+        resource '*', headers: :any, methods: [
+          :get,
+          :post,
+          :put,
+          :delete,
+          :options
+        ], expose: expose: %W{
+          Link
+          X-Total-Count
+          X-Total-Pages
+          X-Current-Page
+          X-Next-Page
+          X-Previous-Page
+        }
       end
     end
   end

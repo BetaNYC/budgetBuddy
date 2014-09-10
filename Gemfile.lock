@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/twbs/bootstrap-sass.git
+  revision: c062283837c63ed8e7b77b52c513db30ecb6cdb5
+  specs:
+    bootstrap-sass (3.2.0.2)
+      sass (~> 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -47,10 +54,13 @@ GEM
       http_parser.rb (~> 0.6.0)
     erubis (2.7.0)
     eventmachine (1.0.3)
+    execjs (2.2.1)
     ffi (1.9.3)
     figaro (0.7.0)
       bundler (~> 1.0)
       rails (>= 3, < 5)
+    font-awesome-rails (4.2.0.0)
+      railties (>= 3.2, < 5.0)
     formatador (0.2.5)
     guard (2.6.1)
       formatador (>= 0.2.4)
@@ -79,6 +89,10 @@ GEM
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    lograge (0.3.0)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     lumberjack (1.0.9)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -96,6 +110,8 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
+    quiet_assets (1.0.3)
+      railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -130,6 +146,7 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    sass (3.4.3)
     slop (3.5.0)
     spring (1.1.3)
     sprockets (2.12.1)
@@ -156,6 +173,9 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uglifier (2.5.3)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
 
 PLATFORMS
   ruby
@@ -164,15 +184,19 @@ DEPENDENCIES
   active_model_serializers
   better_errors (>= 1.1.0)
   binding_of_caller (>= 0.7.2)
+  bootstrap-sass!
   dalli
   figaro
+  font-awesome-rails
   guard
   guard-livereload
   haml-rails
   kgio
+  lograge
   memcachier
   pg
   pry-rails
+  quiet_assets
   rack-cache
   rack-cors
   rack-timeout
@@ -182,3 +206,4 @@ DEPENDENCIES
   spring
   swagger-docs
   thin
+  uglifier (>= 1.0.3)

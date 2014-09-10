@@ -7,13 +7,19 @@ gem 'pg'
 gem 'rack-cors'
 gem 'rack-timeout'
 gem 'active_model_serializers'
-gem 'figaro'
 gem 'swagger-docs'
 gem 'rack-cache'
 gem 'dalli'
 gem 'kgio'
 gem 'thin'
 gem 'haml-rails'
+gem 'quiet_assets'
+gem 'uglifier', '>= 1.0.3'
+gem 'bootstrap-sass', github: "twbs/bootstrap-sass"
+gem "font-awesome-rails"
+gem "figaro"
+gem "lograge"
+  
 
 group :development do
   gem 'spring'

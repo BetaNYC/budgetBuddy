@@ -82,4 +82,7 @@ Rails.application.configure do
 
   # To properly invalidate modified files, Rails keeps a hash digest of each file, storing it as part of the computed filename. This acts as a fingerprint of a file so it can be detected when it has changed. Enable this approach with the config.assets.digest setting.
   config.assets.digest = true
+
+
+  config.lograge.enabled = true
 end

@@ -13,6 +13,7 @@ gem 'rack-cache'
 gem 'dalli'
 gem 'kgio'
 gem 'thin'
+gem 'haml-rails'
 
 group :development do
   gem 'spring'

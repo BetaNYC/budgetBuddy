@@ -1,4 +1,4 @@
-class V1Controller < ApplicationController
+class V1Controller < ActionController::API
   include Pager
   include Swagger::Docs::ImpotentMethods
 

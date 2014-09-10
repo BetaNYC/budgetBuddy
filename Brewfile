@@ -1,6 +1,1 @@
-
-
 install postgresql
-
-
-

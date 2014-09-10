@@ -40,6 +40,7 @@ GEM
       timers (~> 4.0.0)
     coderay (1.1.0)
     daemons (1.1.9)
+    dalli (2.7.2)
     debug_inspector (0.0.2)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
@@ -66,6 +67,7 @@ GEM
     http_parser.rb (0.6.0)
     i18n (0.6.11)
     json (1.8.1)
+    kgio (2.9.2)
     listen (2.7.9)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -74,6 +76,7 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    memcachier (0.0.2)
     method_source (0.8.2)
     mime-types (1.25.1)
     minitest (5.4.0)
@@ -87,6 +90,8 @@ GEM
     pry-rails (0.3.2)
       pry (>= 0.9.10)
     rack (1.5.2)
+    rack-cache (1.2)
+      rack (>= 0.4)
     rack-cors (0.2.9)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -152,11 +157,15 @@ DEPENDENCIES
   active_model_serializers
   better_errors (>= 1.1.0)
   binding_of_caller (>= 0.7.2)
+  dalli
   figaro
   guard
   guard-livereload
+  kgio
+  memcachier
   pg
   pry-rails
+  rack-cache
   rack-cors
   rack-timeout
   rails (= 4.1.5)

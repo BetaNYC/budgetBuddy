@@ -20,7 +20,7 @@ Rails.application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_assets = false
+  config.serve_static_assets = true
 
 
   # Specifies the header that your server uses for sending files.
@@ -41,6 +41,20 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
+  config.cache_store = :dalli_store
+  client = Dalli::Client.new((ENV["MEMCACHIER_SERVERS"] || "").split(","),
+                             :username => ENV["MEMCACHIER_USERNAME"],
+                             :password => ENV["MEMCACHIER_PASSWORD"],
+                             :failover => true,
+                             :socket_timeout => 1.5,
+                             :socket_failure_delay => 0.2,
+                             :value_max_bytes => 10485760)
+  config.action_dispatch.rack_cache = {
+    :metastore    => client,
+    :entitystore  => client
+  }
+  config.static_cache_control = "public, max-age=2592000"
+
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -65,4 +79,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # To properly invalidate modified files, Rails keeps a hash digest of each file, storing it as part of the computed filename. This acts as a fingerprint of a file so it can be detected when it has changed. Enable this approach with the config.assets.digest setting.
+  config.assets.digest = true
 end

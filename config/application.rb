@@ -48,7 +48,7 @@ module BudgetBuddy
           :put,
           :delete,
           :options
-        ], expose: expose: %W{
+        ], expose: %W{
           Link
           X-Total-Count
           X-Total-Pages

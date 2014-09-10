@@ -9,6 +9,10 @@ gem 'rack-timeout'
 gem 'active_model_serializers'
 gem 'figaro'
 gem 'swagger-docs'
+gem 'rack-cache'
+gem 'dalli'
+gem 'kgio'
+gem 'thin'
 
 group :development do
   gem 'spring'
@@ -24,5 +28,5 @@ end
 
 group :production do
   gem "rails_12factor"
-  gem "thin"
+  gem "memcachier"
 end

@@ -14,6 +14,8 @@ group :development do
   gem 'spring'
   gem 'better_errors', '>= 1.1.0'
   gem 'binding_of_caller', '>= 0.7.2' #, :platforms => [:mri_19, :rbx]
+  gem "guard"
+  gem "guard-livereload"
 end
 
 group :development, :test do
